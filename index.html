@@ -564,6 +564,11 @@
                 // attach subitem handlers
                 sub.querySelectorAll('.subitem').forEach(si=>{
                     si.style.cursor = 'pointer';
+                    si.style.padding = '6px 0';
+                    si.style.fontSize = '13px';
+                    si.style.color = '#0078d4';
+                    si.style.display = 'block';
+                    si.style.marginLeft = '8px';
                     si.addEventListener('click', e=>{
                         e.stopPropagation();
                         const action = si.getAttribute('data-action');
@@ -619,7 +624,8 @@
                 const mySub = parentWrapper.querySelector('.subnav');
                 if (mySub) mySub.style.display = 'block';
             }
-            // default to breakdown view when selecting workload
+            // set current workload and default to breakdown view
+            currentWorkloadName = name;
             showDetailSection('breakdown');
             container.innerHTML = '';
             const entries = allWorkloads[name] || [];
