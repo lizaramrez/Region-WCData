@@ -543,15 +543,21 @@
             keys.forEach(wl => {
                 const entries = allWorkloads[wl] || [];
                 const deployedCount = entries.length;
+                let totalCores = 0;
+                entries.forEach(e=>{ totalCores += parseInt(e.cores) || 0; });
                 const statCard = document.createElement('div');
                 statCard.className = 'region-card';
-                statCard.style.cursor = 'pointer';
+                statCard.style.cursor = 'default';
                 statCard.innerHTML = `
                     <div class="region-name">${wl}</div>
                     <div class="region-info">
                         <div class="info-row">
                             <span class="info-label">Deployed Regions:</span>
                             <span class="info-value" style="font-size:18px; font-weight:600; color:#0078d4">${deployedCount}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Total Cores:</span>
+                            <span class="info-value" style="font-size:18px; font-weight:600; color:#0078d4">${totalCores}</span>
                         </div>`;
                 if (deployedCount > 0) {
                     const geos = new Set();
@@ -567,10 +573,11 @@
                         </div>`;
                 }
                 statCard.innerHTML += `</div>`;
-                statCard.addEventListener('click', () => {
-                    const wlItem = Array.from(document.querySelectorAll('.workload-item')).find(item => item.textContent === wl);
-                    if (wlItem) selectWorkload(wl, wlItem);
-                });
+                // summary cards are not clickable by default; drill-in via workload list later
+                //statCard.addEventListener('click', () => {
+                //    const wlItem = Array.from(document.querySelectorAll('.workload-item')).find(item => item.textContent === wl);
+                //    if (wlItem) selectWorkload(wl, wlItem);
+                //});
                 statsContainer.appendChild(statCard);
             });
         }
