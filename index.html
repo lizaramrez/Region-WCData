@@ -259,9 +259,8 @@
     </style>
     <!-- Chart.js for graphical summaries -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- plugins for treemap and geo/bubble map -->
+    <!-- plugins for treemap -->
     <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-treemap"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-geo"></script>
 </head>
 <body>
     <div class="container">
@@ -347,8 +346,8 @@
                         <canvas id="treemapChart" style="max-width:100%;height:300px"></canvas>
                     </div>
                     <div style="margin-bottom:30px;">
-                        <h3 style="color:#0078d4; font-size:16px; margin-bottom:16px; font-weight:600">World Map of Major Footprints</h3>
-                        <canvas id="worldMapChart" style="max-width:100%;height:300px"></canvas>
+                        <h3 style="color:#0078d4; font-size:16px; margin-bottom:16px; font-weight:600">📍 Major Deployments by Geography</h3>
+                        <canvas id="majorByGeoChart" style="max-width:100%;height:200px"></canvas>
                     </div>
 
                     <!-- Footprint Analytics Section -->
@@ -588,7 +587,7 @@
             renderGeoStackChart();
             renderStatusPieChart();
             renderTreemapChart();
-            renderWorldMapChart();
+            renderMajorByGeoChart();
             renderFootprintAnalytics();
         }
 
@@ -772,48 +771,41 @@
             });
         }
 
-        function renderWorldMapChart() {
-            // aggregate major counts per geo
+        function renderMajorByGeoChart() {
+            // count major deployments per geo
             const majorCounts = { APAC:0, EMEA:0, NOAM:0 };
             Object.values(allWorkloads).forEach(entries=>{
                 entries.forEach(e=>{
                     if (e.RegionDeployments) {
-                        Object.values(e.RegionDeployments).forEach(s=>{
-                            if (s==='Major') {
+                        Object.entries(e.RegionDeployments).forEach(([region, status])=>{
+                            if (status==='Major') {
                                 majorCounts[e.Geo] = (majorCounts[e.Geo]||0)+1;
                             }
                         });
                     }
                 });
             });
-            const points = [
-                {latitude:0, longitude:120, value:majorCounts.APAC||0},
-                {latitude:50, longitude:10, value:majorCounts.EMEA||0},
-                {latitude:40, longitude:-100, value:majorCounts.NOAM||0},
-            ];
-            const canvas = document.getElementById('worldMapChart');
+            const geos = Object.keys(majorCounts);
+            const counts = geos.map(g=>majorCounts[g]);
+            const canvas = document.getElementById('majorByGeoChart');
+            canvas.width = canvas.offsetWidth;
+            canvas.height = 200;
             const ctx = canvas.getContext('2d');
-            if (window.worldMapInstance) window.worldMapInstance.destroy();
-            // simple bubble chart fallback instead of geo map (geo plugin often has issues)
-            window.worldMapInstance = new Chart(ctx, {
-                type: 'bubble',
+            if (window.majorByGeoInstance) window.majorByGeoInstance.destroy();
+            window.majorByGeoInstance = new Chart(ctx, {
+                type: 'bar',
                 data: {
+                    labels: geos,
                     datasets: [{
-                        label: 'Major footprint by geo',
-                        data: [
-                            {x:0, y:0, r: majorCounts.APAC * 3, label: 'APAC'},
-                            {x:50, y:10, r: majorCounts.EMEA * 3, label: 'EMEA'},
-                            {x:40, y:-100, r: majorCounts.NOAM * 3, label: 'NOAM'}
-                        ],
-                        backgroundColor: 'rgba(0,120,212,0.6)'
+                        label: 'Major Region Count',
+                        data: counts,
+                        backgroundColor: ['#0078d4', '#00c853', '#ff9800']
                     }]
                 },
                 options: {
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        x: { beginAtZero: true },
-                        y: { beginAtZero: true }
-                    }
+                    responsive: false,
+                    indexAxis: 'y',
+                    scales: { x: { beginAtZero: true } }
                 }
             });
         }
