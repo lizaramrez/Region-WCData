@@ -418,6 +418,63 @@
                     <!-- Breakdown per service -->
                     <div id="breakdownView" style="display:none;">
                         <div id="serviceBreakdownCharts"></div>
+                        <div style="margin-top:32px;">
+                            <h4 style="color:#0078d4; font-size:15px; font-weight:600; margin-bottom:10px;">Region Names Matrix</h4>
+                            <div style="margin-bottom:18px;padding:16px 22px;background:linear-gradient(90deg,#f7fafd 60%,#f0f4f8 100%);border:1px solid #e0e0e0;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.03);max-width:700px;">
+                                <div style="font-size:15px;font-weight:700;letter-spacing:0.5px;margin-bottom:8px;color:#333;">Legend</div>
+                                <div style="display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-start;">
+                                    <div style="display:flex;align-items:center;gap:7px;min-width:180px;"><span style="display:inline-block;width:18px;height:18px;background:#107c10;border-radius:50%;margin-right:4px;"></span><span style="font-weight:600;color:#222;">Major</span><span style="color:#555;font-weight:400;">Region has ≥20% of its Geo's total cores for that Namespace</span></div>
+                                    <div style="display:flex;align-items:center;gap:7px;min-width:180px;"><span style="display:inline-block;width:18px;height:18px;background:#0078d4;border-radius:50%;margin-right:4px;"></span><span style="font-weight:600;color:#222;">Smaller</span><span style="color:#555;font-weight:400;">Region has &lt;20% of its Geo's total cores, BUT has at least one other region in the same Namespace qualifies as Major (in the event that a Namespace is spread across more than 5 regions in a geo)</span></div>
+                                    <div style="display:flex;align-items:center;gap:7px;min-width:180px;"><span style="display:inline-block;width:18px;height:18px;background:#bfa600;border-radius:50%;margin-right:4px;"></span><span style="font-weight:600;color:#222;">Opportunity</span><span style="color:#555;font-weight:400;">Namespace could <u>add</u> the region to their footprint, BUT not necessarily as a replacement for another existing region</span></div>
+                                    <div style="display:flex;align-items:center;gap:7px;min-width:180px;"><span style="display:inline-block;width:18px;height:18px;background:#999;border-radius:50%;margin-right:4px;"></span><span style="font-weight:600;color:#222;">Out-of-Scope</span><span style="color:#555;font-weight:400;">Unable to deploy any capacity to the region for compliance reasons</span></div>
+                                </div>
+                            </div>
+                            <div id="namespaceRegionMatrix"></div>
+                        </div>
+                            // --- Region Names Matrix rendering ---
+                            function renderRegionNamesMatrix(name) {
+                                const entries = allWorkloads[name] || [];
+                                // Gather data: namespace -> status -> [region names]
+                                const nsRegionMap = {};
+                                entries.forEach(e => {
+                                    const ns = e.Namespace || e.namespace || 'Unknown';
+                                    if (!nsRegionMap[ns]) nsRegionMap[ns] = { Major: [], Smaller: [], Opportunity: [] };
+                                    if (e.RegionDeployments) {
+                                        Object.entries(e.RegionDeployments).forEach(([region, status]) => {
+                                            if (status === 'Major' || status === 'Smaller' || status === 'Opportunity') {
+                                                nsRegionMap[ns][status].push(region);
+                                            }
+                                        });
+                                    }
+                                });
+                                // Build table
+                                const matrixStatusTypes = ['Major', 'Smaller', 'Opportunity'];
+                                let html = '<table style="width:100%;border-collapse:collapse;font-size:14px;">';
+                                html += '<tr><th style="text-align:left;padding:6px 8px;border-bottom:2px solid #e0e0e0;">Namespace</th>';
+                                matrixStatusTypes.forEach(status => {
+                                    html += `<th style=\"text-align:left;padding:6px 8px;border-bottom:2px solid #e0e0e0;\">${status}</th>`;
+                                });
+                                html += '</tr>';
+                                Object.keys(nsRegionMap).forEach(ns => {
+                                    html += `<tr><td style=\"padding:6px 8px;border-bottom:1px solid #f0f0f0;\"><strong>${ns}</strong></td>`;
+                                    matrixStatusTypes.forEach(status => {
+                                        const regions = nsRegionMap[ns][status];
+                                        html += '<td style="padding:6px 8px;border-bottom:1px solid #f0f0f0;">';
+                                        if (regions.length) {
+                                            regions.forEach(region => {
+                                                let color = status === 'Major' ? '#107c10' : status === 'Smaller' ? '#0078d4' : '#bfa600';
+                                                html += `<span style=\"display:inline-block;background:${color};color:#fff;padding:2px 8px;border-radius:12px;margin:2px 2px 2px 0;font-size:13px;\">${region}</span>`;
+                                            });
+                                        } else {
+                                            html += '<span style="color:#bbb;font-size:12px;">—</span>';
+                                        }
+                                        html += '</td>';
+                                    });
+                                    html += '</tr>';
+                                });
+                                html += '</table>';
+                                document.getElementById('namespaceRegionMatrix').innerHTML = html;
+                            }
                     </div>
 
                     <!-- Flexibility editor -->
@@ -939,7 +996,10 @@
                     }
                 }
             });
-            if (section==='breakdown') renderServiceBreakdown(currentWorkloadName);
+            if (section==='breakdown') {
+                renderServiceBreakdown(currentWorkloadName);
+                renderRegionNamesMatrix(currentWorkloadName);
+            }
             if (section==='flex') renderFlexEditor(currentWorkloadName);
         }
 
@@ -1009,6 +1069,51 @@
             });
         }
 
+        // --- Region Names Matrix rendering ---
+        function renderRegionNamesMatrix(name) {
+            const entries = allWorkloads[name] || [];
+            // Gather data: namespace -> status -> [region names]
+            const nsRegionMap = {};
+            entries.forEach(e => {
+                const ns = e.Namespace || e.namespace || 'Unknown';
+                if (!nsRegionMap[ns]) nsRegionMap[ns] = { Major: [], Smaller: [], Opportunity: [] };
+                if (e.RegionDeployments) {
+                    Object.entries(e.RegionDeployments).forEach(([region, status]) => {
+                        if (status === 'Major' || status === 'Smaller' || status === 'Opportunity') {
+                            nsRegionMap[ns][status].push(region);
+                        }
+                    });
+                }
+            });
+            // Build table
+            const matrixStatusTypes = ['Major', 'Smaller', 'Opportunity'];
+            let html = '<table style="width:100%;border-collapse:collapse;font-size:14px;">';
+            html += '<tr><th style="text-align:left;padding:6px 8px;border-bottom:2px solid #e0e0e0;">Namespace</th>';
+            matrixStatusTypes.forEach(status => {
+                html += `<th style=\"text-align:left;padding:6px 8px;border-bottom:2px solid #e0e0e0;\">${status}</th>`;
+            });
+            html += '</tr>';
+            Object.keys(nsRegionMap).forEach(ns => {
+                html += `<tr><td style=\"padding:6px 8px;border-bottom:1px solid #f0f0f0;\"><strong>${ns}</strong></td>`;
+                matrixStatusTypes.forEach(status => {
+                    const regions = nsRegionMap[ns][status];
+                    html += '<td style="padding:6px 8px;border-bottom:1px solid #f0f0f0;">';
+                    if (regions.length) {
+                        regions.forEach(region => {
+                            let color = status === 'Major' ? '#107c10' : status === 'Smaller' ? '#0078d4' : '#bfa600';
+                            html += `<span style=\"display:inline-block;background:${color};color:#fff;padding:2px 8px;border-radius:12px;margin:2px 2px 2px 0;font-size:13px;\">${region}</span>`;
+                        });
+                    } else {
+                        html += '<span style="color:#bbb;font-size:12px;">—</span>';
+                    }
+                    html += '</td>';
+                });
+                html += '</tr>';
+            });
+            html += '</table>';
+            document.getElementById('namespaceRegionMatrix').innerHTML = html;
+        }
+        
         function renderFootprintAnalytics() {
             // Collect all footprint data across workloads
             const regionCoverage = {}; // region -> count of workloads
