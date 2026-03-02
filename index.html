@@ -23,73 +23,133 @@
             height: 100%;
         }
 
-        /* LEFT SIDE - FILTERS */
+        /* LEFT SIDE - NARROWER */
         .filter-section {
-            width: 25%;
+            width: 280px;
             background: white;
-            padding: 30px;
+            padding: 16px;
             border-right: 1px solid #e0e0e0;
-            overflow-y: auto;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            overflow: hidden;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
         }
 
-        .filter-section h2 {
+        .tabs-container {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            flex-shrink: 0;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 8px 10px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: #0078d4;
+            color: white;
+        }
+
+        .tab-btn.inactive {
+            background: transparent;
             color: #0078d4;
-            font-size: 20px;
-            margin-bottom: 25px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
+            min-height: 0;
+        }
+
+        .section-title {
+            color: #0078d4;
+            font-size: 16px;
+            margin-bottom: 14px;
             font-weight: 600;
         }
 
         .filter-group {
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
         .filter-option {
             display: flex;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             cursor: pointer;
-            padding: 10px;
+            padding: 6px;
             border-radius: 4px;
-            transition: background 0.2s;
+            transition: background 0.15s;
         }
 
         .filter-option:hover {
-            background: #f0f0f0;
+            background: #f5f5f5;
         }
 
         .filter-option input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             cursor: pointer;
-            margin-right: 12px;
+            margin-right: 10px;
             accent-color: #0078d4;
         }
 
         .filter-option label {
             cursor: pointer;
-            flex: 1;
-            font-size: 16px;
+            font-size: 14px;
             color: #333;
             font-weight: 500;
         }
 
         .select-all {
-            margin-bottom: 20px;
-            padding: 12px;
+            margin-bottom: 12px;
+            padding: 10px;
             background: #e7f1f8;
             border-left: 4px solid #0078d4;
             border-radius: 4px;
         }
 
         .select-all input {
-            margin-right: 10px;
+            margin-right: 8px;
             accent-color: #0078d4;
         }
 
         .select-all label {
             cursor: pointer;
             font-weight: 600;
+            color: #0078d4;
+            font-size: 14px;
+        }
+
+        .workload-item {
+            padding: 10px;
+            margin-bottom: 8px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #333;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .workload-item:hover {
+            background: #f5f5f5;
+            border-color: #0078d4;
+        }
+
+        .workload-item.active {
+            background: #e7f1f8;
+            border-color: #0078d4;
             color: #0078d4;
         }
 
@@ -129,7 +189,6 @@
             padding: 18px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             transition: all 0.3s;
-            cursor: pointer;
         }
 
         .region-card:hover {
@@ -174,18 +233,12 @@
             color: #999;
         }
 
-        .empty-state p {
-            font-size: 16px;
-            margin-bottom: 10px;
-        }
-
         .empty-state-icon {
             font-size: 48px;
             margin-bottom: 20px;
             opacity: 0.3;
         }
 
-        /* Scrollbar styling */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
@@ -207,111 +260,105 @@
 </head>
 <body>
     <div class="container">
-        <div style="width:100%; padding:12px 24px; background:#fff; border-bottom:1px solid #eee; display:flex; gap:12px; align-items:center;">
-            <button id="tabRegions" class="tab-btn" style="background:#0078d4;color:#fff;padding:8px 14px;border-radius:6px;border:none;cursor:pointer">Regions</button>
-            <button id="tabWorkloads" class="tab-btn" style="background:transparent;color:#0078d4;padding:8px 14px;border-radius:6px;border:1px solid transparent;cursor:pointer">Workloads</button>
-        </div>
-
-        <!-- TAB: Regions -->
-        <div id="tabContentRegions" style="display:block; width:100%">
-        <!-- LEFT PANEL - FILTERS -->
+        <!-- LEFT PANEL -->
         <div class="filter-section">
-            <h2>🌍 Geographic Regions</h2>
-            
-            <div class="select-all">
-                <input type="checkbox" id="selectAll">
-                <label for="selectAll">Select All Regions</label>
+            <!-- Tabs -->
+            <div class="tabs-container">
+                <button id="tabRegions" class="tab-btn active">Regions</button>
+                <button id="tabWorkloads" class="tab-btn inactive">Workloads</button>
             </div>
 
-            <div class="filter-group">
-                <div class="filter-option">
-                    <input type="checkbox" id="apac" value="APAC" checked>
-                    <label for="apac">🌏 APAC (Asia Pacific)</label>
+            <!-- Content Area (switches between regions and workloads) -->
+            <div class="content-area">
+                <!-- Regions filters -->
+                <div id="regionFilters">
+                    <div class="section-title">🌍 Geographic Regions</div>
+
+                    <div class="select-all">
+                        <input type="checkbox" id="selectAll">
+                        <label for="selectAll">Select All Regions</label>
+                    </div>
+
+                    <div class="filter-group">
+                        <div class="filter-option">
+                            <input type="checkbox" id="apac" value="APAC" checked>
+                            <label for="apac">🌏 APAC</label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="checkbox" id="emea" value="EMEA" checked>
+                            <label for="emea">🌍 EMEA</label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="checkbox" id="noam" value="NOAM" checked>
+                            <label for="noam">🌎 NOAM</label>
+                        </div>
+                    </div>
                 </div>
-                <div class="filter-option">
-                    <input type="checkbox" id="emea" value="EMEA" checked>
-                    <label for="emea">🌍 EMEA (Europe & Africa)</label>
-                </div>
-                <div class="filter-option">
-                    <input type="checkbox" id="noam" value="NOAM" checked>
-                    <label for="noam">🌎 NOAM (North America)</label>
+
+                <!-- Workloads list -->
+                <div id="workloadNav" style="display:none;">
+                    <div class="section-title">Workloads</div>
+                    <div id="workloadList"></div>
                 </div>
             </div>
         </div>
 
-        <!-- RIGHT PANEL - DISPLAY -->
+        <!-- RIGHT PANEL -->
         <div class="display-section">
-            <div class="display-header">
-                <h2>Azure Regions</h2>
-                <div class="region-count" id="regionCount">Loading...</div>
+            <!-- Regions display -->
+            <div id="regionsDisplay">
+                <div class="display-header">
+                    <h2>Azure Regions</h2>
+                    <div class="region-count" id="regionCount">Loading...</div>
+                </div>
+                <div id="regionsContainer" class="regions-grid"></div>
             </div>
-            <div id="regionsContainer" class="regions-grid"></div>
-        </div>
-        </div>
 
-        <!-- TAB: Workloads -->
-        <div id="tabContentWorkloads" style="display:none; width:100%;">
-            <div style="display:flex; height:calc(100vh - 64px);">
-                <div style="width:260px; background:#fff; border-right:1px solid #eee; padding:18px; overflow:auto;">
-                    <h3 style="color:#0078d4; margin-bottom:12px">Workloads</h3>
-                    <div id="workloadList">
-                        <!-- workload items injected here -->
-                    </div>
+            <!-- Workloads display -->
+            <div id="workloadsDisplay" style="display:none;">
+                <div class="display-header">
+                    <h2>Workload Details</h2>
+                    <div id="workloadSub" style="color:#666; font-size:13px">Select a workload to view deployed regions</div>
                 </div>
-                <div style="flex:1; padding:24px; overflow:auto; background:#fafafa;">
-                    <div style="margin-bottom:18px">
-                        <h2 style="color:#0078d4; margin:0">Workload details</h2>
-                        <div id="workloadSub" style="color:#666; font-size:13px">Select a workload to view deployed regions and suggestions</div>
-                    </div>
-                    <div id="workloadRegionsContainer" class="regions-grid"></div>
-                </div>
+                <div id="workloadRegionsContainer" class="regions-grid"></div>
             </div>
         </div>
     </div>
 
     <script>
         let allRegionsData = {};
+        let allWorkloads = {};
         let selectedGeos = new Set(['APAC', 'EMEA', 'NOAM']);
 
-        // Load data from JSON files
+        // Load both JSON files
         Promise.all([
             fetch('region_data.json').then(r => r.json()),
             fetch('workloads.json').then(r => r.json())
         ]).then(([regionsData, workloadsData]) => {
-            allRegionsData = regionsData;
-            allWorkloads = workloadsData;
+            allRegionsData = regionsData || {};
+            allWorkloads = workloadsData || {};
             displayRegions();
             renderWorkloadList();
-        }).catch(err => {
-            console.error('Error loading data:', err);
-        });
+        }).catch(err => console.error('Error loading data', err));
 
-        let allWorkloads = {};
-
-        // Filter checkboxes
-        const filterCheckboxes = document.querySelectorAll('#apac, #emea, #noam');
+        // Region filters
+        const filterCheckboxes = document.querySelectorAll('#apac,#emea,#noam');
         const selectAllCheckbox = document.getElementById('selectAll');
 
-        filterCheckboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', (e) => {
-                if (e.target.checked) {
-                    selectedGeos.add(e.target.value);
-                } else {
-                    selectedGeos.delete(e.target.value);
-                }
+        filterCheckboxes.forEach(cb => {
+            cb.addEventListener('change', e => {
+                if (e.target.checked) selectedGeos.add(e.target.value);
+                else selectedGeos.delete(e.target.value);
                 updateSelectAllCheckbox();
                 displayRegions();
             });
         });
 
-        selectAllCheckbox.addEventListener('change', (e) => {
-            filterCheckboxes.forEach(checkbox => {
-                checkbox.checked = e.target.checked;
-                if (e.target.checked) {
-                    selectedGeos.add(checkbox.value);
-                } else {
-                    selectedGeos.delete(checkbox.value);
-                }
+        selectAllCheckbox.addEventListener('change', e => {
+            filterCheckboxes.forEach(cb => {
+                cb.checked = e.target.checked;
+                if (e.target.checked) selectedGeos.add(cb.value);
+                else selectedGeos.delete(cb.value);
             });
             displayRegions();
         });
@@ -322,90 +369,74 @@
 
         function displayRegions() {
             const container = document.getElementById('regionsContainer');
-            const countElement = document.getElementById('regionCount');
+            const countEl = document.getElementById('regionCount');
             container.innerHTML = '';
-
             let regionCount = 0;
 
             selectedGeos.forEach(geo => {
-                const regions = allRegionsData[geo] || [];
+                const regions = (allRegionsData[geo] || []);
                 regionCount += regions.length;
-
                 regions.forEach(region => {
                     const card = document.createElement('div');
                     card.className = 'region-card';
                     card.innerHTML = `
                         <div class="region-name">${region.name}</div>
                         <div class="region-info">
-                            <div class="info-row">
-                                <span class="info-label">Region Type:</span>
-                                <span class="info-value">${region.regionType}</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">Cloud Type:</span>
-                                <span class="info-value">${region.cloudType}</span>
-                            </div>
-                        </div>
-                    `;
+                            <div class="info-row"><span class="info-label">Region Type:</span><span class="info-value">${region.regionType}</span></div>
+                            <div class="info-row"><span class="info-label">Cloud Type:</span><span class="info-value">${region.cloudType}</span></div>
+                        </div>`;
                     container.appendChild(card);
                 });
             });
 
-            countElement.textContent = `Showing ${regionCount} region(s)`;
-
+            countEl.textContent = `Showing ${regionCount} region(s)`;
             if (regionCount === 0) {
-                container.innerHTML = `
-                    <div style="grid-column: 1 / -1;">
-                        <div class="empty-state">
-                            <div class="empty-state-icon">📭</div>
-                            <p>No regions selected</p>
-                            <p style="font-size: 13px; color: #ccc;">Select at least one geographic region to see regions</p>
-                        </div>
-                    </div>
-                `;
+                container.innerHTML = `<div style="grid-column:1/-1"><div class="empty-state"><div class="empty-state-icon">📭</div><p>No regions selected</p></div></div>`;
             }
         }
 
-        // --- Tabs handling ---
+        // Tab switching
         const tabRegionsBtn = document.getElementById('tabRegions');
         const tabWorkloadsBtn = document.getElementById('tabWorkloads');
-        const tabContentRegions = document.getElementById('tabContentRegions');
-        const tabContentWorkloads = document.getElementById('tabContentWorkloads');
+        const regionFilters = document.getElementById('regionFilters');
+        const workloadNav = document.getElementById('workloadNav');
+        const regionsDisplay = document.getElementById('regionsDisplay');
+        const workloadsDisplay = document.getElementById('workloadsDisplay');
 
         tabRegionsBtn.addEventListener('click', () => {
-            tabRegionsBtn.style.background = '#0078d4';
-            tabRegionsBtn.style.color = '#fff';
-            tabWorkloadsBtn.style.background = 'transparent';
-            tabWorkloadsBtn.style.color = '#0078d4';
-            tabContentRegions.style.display = 'block';
-            tabContentWorkloads.style.display = 'none';
+            tabRegionsBtn.classList.add('active');
+            tabRegionsBtn.classList.remove('inactive');
+            tabWorkloadsBtn.classList.remove('active');
+            tabWorkloadsBtn.classList.add('inactive');
+            regionFilters.style.display = 'block';
+            workloadNav.style.display = 'none';
+            regionsDisplay.style.display = 'block';
+            workloadsDisplay.style.display = 'none';
         });
 
         tabWorkloadsBtn.addEventListener('click', () => {
-            tabWorkloadsBtn.style.background = '#0078d4';
-            tabWorkloadsBtn.style.color = '#fff';
-            tabRegionsBtn.style.background = 'transparent';
-            tabRegionsBtn.style.color = '#0078d4';
-            tabContentRegions.style.display = 'none';
-            tabContentWorkloads.style.display = 'block';
+            tabWorkloadsBtn.classList.add('active');
+            tabWorkloadsBtn.classList.remove('inactive');
+            tabRegionsBtn.classList.remove('active');
+            tabRegionsBtn.classList.add('inactive');
+            regionFilters.style.display = 'none';
+            workloadNav.style.display = 'block';
+            regionsDisplay.style.display = 'none';
+            workloadsDisplay.style.display = 'block';
         });
 
-        // --- Workloads UI ---
-        function renderWorkloadList(){
+        // Workloads UI
+        function renderWorkloadList() {
             const wlContainer = document.getElementById('workloadList');
             wlContainer.innerHTML = '';
             const keys = Object.keys(allWorkloads || {});
-            if(keys.length === 0){
-                wlContainer.innerHTML = '<div style="color:#999;">No workload data available. Upload `Workloads.csv` or add a sheet named "Workloads" in the Excel.</div>';
+            if (keys.length === 0) {
+                wlContainer.innerHTML = '<div style="color:#999;font-size:13px">No workload data available.</div>';
                 return;
             }
-            keys.forEach((wl, idx) => {
+            keys.forEach(wl => {
                 const btn = document.createElement('div');
-                btn.style.padding = '10px';
-                btn.style.borderRadius = '6px';
-                btn.style.cursor = 'pointer';
-                btn.style.marginBottom = '8px';
-                btn.style.border = '1px solid #eee';
+                btn.className = 'workload-item';
                 btn.textContent = wl;
                 btn.addEventListener('click', () => selectWorkload(wl, btn));
                 wlContainer.appendChild(btn);
@@ -413,33 +444,34 @@
         }
 
         let selectedWorkloadBtn = null;
-        function selectWorkload(name, btnEl){
-            if(selectedWorkloadBtn) selectedWorkloadBtn.style.background = 'transparent';
-            btnEl.style.background = '#e7f1f8';
+        function selectWorkload(name, btnEl) {
+            if (selectedWorkloadBtn) selectedWorkloadBtn.classList.remove('active');
+            btnEl.classList.add('active');
             selectedWorkloadBtn = btnEl;
             document.getElementById('workloadSub').textContent = `Showing regions for ${name}`;
             renderWorkloadRegions(name);
         }
 
-        function renderWorkloadRegions(name){
+        function renderWorkloadRegions(name) {
             const container = document.getElementById('workloadRegionsContainer');
             container.innerHTML = '';
             const entries = allWorkloads[name] || [];
-            // Create a set of deployed regions for quick lookup
-            const deployed = new Set(entries.filter(e=>e.status && e.status.toLowerCase().includes('deploy')).map(e=>e.region));
-
-            // Show all regions in selected GEOs (optional) and mark deployment status if present
-            const allRegionsFlat = [].concat(...Object.values(allRegionsData || {}));
-            if(entries.length === 0){
-                container.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-icon">📭</div><p>No deployments found for this workload</p></div>';
+            if (entries.length === 0) {
+                container.innerHTML = `<div style="grid-column:1/-1"><div class="empty-state"><div class="empty-state-icon">📭</div><p>No deployments found</p></div></div>`;
                 return;
             }
-
+            const flat = [].concat(...Object.values(allRegionsData || {}));
             entries.forEach(reg => {
                 const card = document.createElement('div');
                 card.className = 'region-card';
-                const regionalInfo = allRegionsFlat.find(r=>r.name === reg.region) || {};
-                card.innerHTML = `\n                    <div class="region-name">${reg.region}</div>\n                    <div class="region-info">\n                        <div class="info-row"><span class="info-label">Region Type:</span><span class="info-value">${regionalInfo.regionType || '—'}</span></div>\n                        <div class="info-row"><span class="info-label">Cloud Type:</span><span class="info-value">${regionalInfo.cloudType || '—'}</span></div>\n                        <div class="info-row"><span class="info-label">Status:</span><span class="info-value">${reg.status}</span></div>\n                    </div>\n                `;
+                const info = flat.find(r => r.name === reg.region) || {};
+                card.innerHTML = `
+                    <div class="region-name">${reg.region}</div>
+                    <div class="region-info">
+                        <div class="info-row"><span class="info-label">Region Type:</span><span class="info-value">${info.regionType || '—'}</span></div>
+                        <div class="info-row"><span class="info-label">Cloud Type:</span><span class="info-value">${info.cloudType || '—'}</span></div>
+                        <div class="info-row"><span class="info-label">Status:</span><span class="info-value">${reg.status}</span></div>
+                    </div>`;
                 container.appendChild(card);
             });
         }
