@@ -399,13 +399,34 @@
                         <h2 id="selectedWorkloadName">Workload Details</h2>
                         <div id="workloadDetailSub" style="color:#666; font-size:13px">Currently deployed regions</div>
                     </div>
-                    <div id="workloadRegionsContainer" class="regions-grid"></div>
-                    <!-- Charts area -->
-                    <div id="workloadCharts" style="margin-top:30px;">
-                        <h3 style="color:#0078d4; font-size:16px; margin-bottom:12px; font-weight:600">Footprint Breakdown</h3>
-                        <div id="chartServices" style="margin-bottom:18px;"></div>
-                        <div id="chartGeos" style="margin-bottom:18px;"></div>
-                        <div id="chartCores" style="margin-bottom:18px;"></div>
+
+                    <!-- sub-tabs inside detail -->
+                    <div class="tabs-container" style="margin-bottom:16px;">
+                        <button id="detailTabRegions" class="tab-btn active" style="padding:6px 8px; font-size:13px;">Regions</button>
+                        <button id="detailTabBreakdown" class="tab-btn inactive" style="padding:6px 8px; font-size:13px;">Footprint Breakdown</button>
+                        <button id="detailTabFlex" class="tab-btn inactive" style="padding:6px 8px; font-size:13px;">Edit Flexibility</button>
+                    </div>
+
+                    <!-- Regions content -->
+                    <div id="detailRegionsView">
+                        <div id="workloadRegionsContainer" class="regions-grid"></div>
+                        <!-- Charts area -->
+                        <div id="workloadCharts" style="margin-top:30px;">
+                            <h3 style="color:#0078d4; font-size:16px; margin-bottom:12px; font-weight:600">Footprint Breakdown</h3>
+                            <div id="chartServices" style="margin-bottom:18px;"></div>
+                            <div id="chartGeos" style="margin-bottom:18px;"></div>
+                            <div id="chartCores" style="margin-bottom:18px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Breakdown per service -->
+                    <div id="detailBreakdownView" style="display:none;">
+                        <div id="serviceBreakdownCharts"></div>
+                    </div>
+
+                    <!-- Flexibility editor -->
+                    <div id="detailFlexView" style="display:none;">
+                        <div id="flexEditor" style="font-size:13px;color:#333;"></div>
                     </div>
                 </div>
             </div>
@@ -527,13 +548,18 @@
                 wlContainer.innerHTML = '<div style="color:#999;font-size:13px">No workload data available.</div>';
                 return;
             }
+            let firstBtn = null;
             keys.forEach(wl => {
                 const btn = document.createElement('div');
                 btn.className = 'workload-item';
                 btn.textContent = wl;
                 btn.addEventListener('click', () => selectWorkload(wl, btn));
                 wlContainer.appendChild(btn);
+                if (wl === 'IC3') firstBtn = btn;
+                if (!firstBtn) firstBtn = btn;
             });
+            // auto-select IC3 if present, else first
+            if (firstBtn) firstBtn.click();
         }
 
         let selectedWorkloadBtn = null;
@@ -541,14 +567,26 @@
             if (selectedWorkloadBtn) selectedWorkloadBtn.classList.remove('active');
             btnEl.classList.add('active');
             selectedWorkloadBtn = btnEl;
+            // show detail panel
             document.getElementById('workloadsDashboard').style.display = 'none';
             document.getElementById('workloadsDetail').style.display = 'block';
             document.getElementById('selectedWorkloadName').textContent = `${name} - Deployment Details`;
             document.getElementById('workloadDetailSub').textContent = `Currently deployed regions for ${name}`;
+            // reset detail sub-tabs to Regions
+            document.getElementById('detailTabRegions').classList.add('active');
+            document.getElementById('detailTabRegions').classList.remove('inactive');
+            document.getElementById('detailTabBreakdown').classList.remove('active');
+            document.getElementById('detailTabBreakdown').classList.add('inactive');
+            document.getElementById('detailTabFlex').classList.remove('active');
+            document.getElementById('detailTabFlex').classList.add('inactive');
+            document.getElementById('detailRegionsView').style.display = 'block';
+            document.getElementById('detailBreakdownView').style.display = 'none';
+            document.getElementById('detailFlexView').style.display = 'none';
             renderWorkloadRegions(name);
         }
 
         function renderWorkloadRegions(name) {
+            currentWorkloadName = name;
             const container = document.getElementById('workloadRegionsContainer');
             container.innerHTML = '';
             const entries = allWorkloads[name] || [];
@@ -583,6 +621,41 @@
             renderMajorByGeoChart();
             renderFootprintAnalytics();
         }
+
+        // wire up detail sub-tabs
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabR = document.getElementById('detailTabRegions');
+            const tabB = document.getElementById('detailTabBreakdown');
+            const tabF = document.getElementById('detailTabFlex');
+            tabR.addEventListener('click', () => {
+                tabR.classList.add('active'); tabR.classList.remove('inactive');
+                tabB.classList.remove('active'); tabB.classList.add('inactive');
+                tabF.classList.remove('active'); tabF.classList.add('inactive');
+                document.getElementById('detailRegionsView').style.display = 'block';
+                document.getElementById('detailBreakdownView').style.display = 'none';
+                document.getElementById('detailFlexView').style.display = 'none';
+            });
+            tabB.addEventListener('click', () => {
+                tabB.classList.add('active'); tabB.classList.remove('inactive');
+                tabR.classList.remove('active'); tabR.classList.add('inactive');
+                tabF.classList.remove('active'); tabF.classList.add('inactive');
+                document.getElementById('detailRegionsView').style.display = 'none';
+                document.getElementById('detailBreakdownView').style.display = 'block';
+                document.getElementById('detailFlexView').style.display = 'none';
+                renderServiceBreakdown(currentWorkloadName);
+            });
+            tabF.addEventListener('click', () => {
+                tabF.classList.add('active'); tabF.classList.remove('inactive');
+                tabR.classList.remove('active'); tabR.classList.add('inactive');
+                tabB.classList.remove('active'); tabB.classList.add('inactive');
+                document.getElementById('detailRegionsView').style.display = 'none';
+                document.getElementById('detailBreakdownView').style.display = 'none';
+                document.getElementById('detailFlexView').style.display = 'block';
+                renderFlexEditor(currentWorkloadName);
+            });
+        });
+
+        let currentWorkloadName = null;
 
         // build the summary chart that appears on the main workloads dashboard
         function renderStatsChart() {
@@ -789,6 +862,57 @@
             if (s==='Opportunity') return '#ff8c00';
             if (s==='Out-of-Scope') return '#999';
             return '#ccc';
+        }
+
+        function renderServiceBreakdown(name) {
+            // show charts per service for specific workload
+            const entries = allWorkloads[name] || [];
+            const byService = {};
+            entries.forEach(e=>{
+                const svc = e.Service || e.service || 'Unknown';
+                byService[svc] = byService[svc] || {regions:0, cores:0};
+                byService[svc].regions += 1;
+                byService[svc].cores += parseInt(e.Cores)||0;
+            });
+            const labels = Object.keys(byService);
+            const regionData = labels.map(l=>byService[l].regions);
+            const coresData = labels.map(l=>byService[l].cores);
+            const div = document.getElementById('serviceBreakdownCharts');
+            div.innerHTML = '<canvas id="serviceRegionsChart" style="max-width:100%;height:200px;margin-bottom:20px"></canvas>'+
+                            '<canvas id="serviceCoresChart" style="max-width:100%;height:200px"></canvas>';
+            // regions per service bar
+            const ctx1 = document.getElementById('serviceRegionsChart').getContext('2d');
+            new Chart(ctx1,{type:'bar',data:{labels,datasets:[{label:'Regions',data:regionData,backgroundColor:'#0078d4'}]},options:{responsive:false}});
+            // cores per service bar
+            const ctx2 = document.getElementById('serviceCoresChart').getContext('2d');
+            new Chart(ctx2,{type:'bar',data:{labels,datasets:[{label:'Cores',data:coresData,backgroundColor:'#00c853'}]},options:{responsive:false}});
+        }
+
+        function renderFlexEditor(name) {
+            const entries = allWorkloads[name] || [];
+            const html = entries.map((e,i)=>{
+                const regions = e.RegionDeployments || {};
+                return `<div style="margin-bottom:16px;padding:12px;border:1px solid #ccc;border-radius:4px;">
+                    <strong>Service:</strong> ${e.Service||''} <br>
+                    <strong>Namespace:</strong> ${e.Namespace||''}<br>
+                    ${Object.entries(regions).map(([r,s])=>
+                        `<div style="margin-top:4px;">${r}: <select data-idx="${i}" data-region="${r}"><option${s==='Major'?' selected':''}>Major</option><option${s==='Smaller'?' selected':''}>Smaller</option><option${s==='Opportunity'?' selected':''}>Opportunity</option><option${s==='Out-of-Scope'?' selected':''}>Out-of-Scope</option></select></div>`
+                    ).join('')}
+                </div>`;
+            }).join('');
+            const flexDiv = document.getElementById('flexEditor');
+            flexDiv.innerHTML = html || '<em>No entries to edit</em>';
+            // attach change handlers to update in-memory data
+            flexDiv.querySelectorAll('select').forEach(sel=>{
+                sel.addEventListener('change', e=>{
+                    const idx = parseInt(e.target.getAttribute('data-idx'));
+                    const region = e.target.getAttribute('data-region');
+                    const newStatus = e.target.value;
+                    if (allWorkloads[name] && allWorkloads[name][idx] && allWorkloads[name][idx].RegionDeployments) {
+                        allWorkloads[name][idx].RegionDeployments[region] = newStatus;
+                    }
+                });
+            });
         }
 
         function renderFootprintAnalytics() {
