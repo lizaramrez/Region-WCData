@@ -1,0 +1,26 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "git init": true,
+        "git remote": true,
+        "pip": true,
+        "/^cd \"c:\\\\Users\\\\lizaramrez\\\\OneDrive - Microsoft\\\\Desktop\\\\VS Code Projects\\\\Region-WCData\" ; python -c \"import pandas as pd; df = pd\\.read_excel\\('RegionData\\.xlsx'\\); print\\(df\\.head\\(\\)\\); print\\('\\\\nShape:', df\\.shape\\); print\\('\\\\nColumns:', df\\.columns\\.tolist\\(\\)\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\Users\\\\lizaramrez\\\\OneDrive - Microsoft\\\\Desktop\\\\VS Code Projects\\\\Region-WCData\" ; python -c \"import pandas as pd; df = pd\\.read_excel\\('RegionData\\.xlsx'\\); print\\(df\\.head\\(10\\)\\); print\\('\\\\nShape:', df\\.shape\\); print\\('\\\\nColumns:', df\\.columns\\.tolist\\(\\)\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\Users\\\\lizaramrez\\\\OneDrive - Microsoft\\\\Desktop\\\\VS Code Projects\\\\Region-WCData\" ; python -c \"import openpyxl; wb = openpyxl\\.load_workbook\\('RegionData\\.xlsx'\\); ws = wb\\.active; print\\('Sheet name:', ws\\.title\\); print\\('Data:'\\); \\[print\\(row\\) for row in list\\(ws\\.iter_rows\\(values_only=True\\)\\)\\[:10\\]\\]\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\Users\\\\lizaramrez\\\\OneDrive - Microsoft\\\\Desktop\\\\VS Code Projects\\\\Region-WCData\" ; python process_data\\.py$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "git add": true,
+        "git commit": true,
+        "git push": true
+    }
+}

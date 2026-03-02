@@ -1,0 +1,383 @@
+{
+  "APAC": [
+    {
+      "name": "East Asia",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "Southeast Asia",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "Australia Central",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "Australia Central 2",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "Australia East",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "Australia Southeast",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "Japan East",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "Japan West",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "Korea Central",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "Korea South",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "Indonesia Central",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "Malaysia South",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "Malaysia West",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "New Zealand North",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "Taiwan North",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "Taiwan Northwest",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "Jio India Central",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "Jio India West",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "Central India",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "South India",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "West India",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    }
+  ],
+  "EMEA": [
+    {
+      "name": "Austria East",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "Belgium Central",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "North Europe",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "West Europe",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "France Central",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "France South",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "Germany North",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "Germany West Central",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "Italy North",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "Norway East",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "Norway West",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "Poland Central",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "Spain Central",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "Sweden Central",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "Sweden South",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "Switzerland North",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "Switzerland West",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "Denmark East",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "Israel Central",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "Israel Northwest",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "Qatar Central",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "South Africa North",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "South Africa West",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "UAE Central",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "UAE North",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "UK South",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "UK West",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    }
+  ],
+  "NOAM": [
+    {
+      "name": "Central US",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "East US",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "East US 2",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "North Central US",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "South Central US",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "West US",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "West US 2",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "West US 3",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "West Central US",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "Canada Central",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "Canada East",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "Mexico Central",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "USGov Virginia",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "USGov Texas",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "USGov Arizona",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "USDoD Central",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "USDoD East",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "USNat East",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "USNat West",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "USSec East",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "USSec West",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "USSec West Central",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "Central US EUAP",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "East US 2 EUAP",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "East US STG",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "South Central US STG",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    },
+    {
+      "name": "Chile Central",
+      "regionType": "Standard",
+      "cloudType": "Public"
+    }
+  ]
+}

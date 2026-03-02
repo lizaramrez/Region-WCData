@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azure Region Filter</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            height: 100%;
+        }
+
+        /* LEFT SIDE - FILTERS */
+        .filter-section {
+            width: 25%;
+            background: white;
+            padding: 30px;
+            border-right: 1px solid #e0e0e0;
+            overflow-y: auto;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+
+        .filter-section h2 {
+            color: #0078d4;
+            font-size: 20px;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+
+        .filter-group {
+            margin-bottom: 20px;
+        }
+
+        .filter-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .filter-option:hover {
+            background: #f0f0f0;
+        }
+
+        .filter-option input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            margin-right: 12px;
+            accent-color: #0078d4;
+        }
+
+        .filter-option label {
+            cursor: pointer;
+            flex: 1;
+            font-size: 16px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .select-all {
+            margin-bottom: 20px;
+            padding: 12px;
+            background: #e7f1f8;
+            border-left: 4px solid #0078d4;
+            border-radius: 4px;
+        }
+
+        .select-all input {
+            margin-right: 10px;
+            accent-color: #0078d4;
+        }
+
+        .select-all label {
+            cursor: pointer;
+            font-weight: 600;
+            color: #0078d4;
+        }
+
+        /* RIGHT SIDE - DISPLAY */
+        .display-section {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            background: #f9f9f9;
+        }
+
+        .display-header {
+            margin-bottom: 25px;
+        }
+
+        .display-header h2 {
+            color: #0078d4;
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .region-count {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .regions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .region-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 18px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .region-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+            border-color: #0078d4;
+        }
+
+        .region-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #0078d4;
+            margin-bottom: 12px;
+        }
+
+        .region-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .info-row {
+            display: flex;
+            font-size: 13px;
+        }
+
+        .info-label {
+            font-weight: 600;
+            min-width: 100px;
+            color: #333;
+            margin-right: 10px;
+        }
+
+        .info-value {
+            color: #666;
+            flex: 1;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .empty-state p {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- LEFT PANEL - FILTERS -->
+        <div class="filter-section">
+            <h2>🌍 Geographic Regions</h2>
+            
+            <div class="select-all">
+                <input type="checkbox" id="selectAll">
+                <label for="selectAll">Select All Regions</label>
+            </div>
+
+            <div class="filter-group">
+                <div class="filter-option">
+                    <input type="checkbox" id="apac" value="APAC" checked>
+                    <label for="apac">🌏 APAC (Asia Pacific)</label>
+                </div>
+                <div class="filter-option">
+                    <input type="checkbox" id="emea" value="EMEA" checked>
+                    <label for="emea">🌍 EMEA (Europe & Africa)</label>
+                </div>
+                <div class="filter-option">
+                    <input type="checkbox" id="noam" value="NOAM" checked>
+                    <label for="noam">🌎 NOAM (North America)</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT PANEL - DISPLAY -->
+        <div class="display-section">
+            <div class="display-header">
+                <h2>Azure Regions</h2>
+                <div class="region-count" id="regionCount">Loading...</div>
+            </div>
+            <div id="regionsContainer" class="regions-grid"></div>
+        </div>
+    </div>
+
+    <script>
+        let allRegionsData = {};
+        let selectedGeos = new Set(['APAC', 'EMEA', 'NOAM']);
+
+        // Load data from JSON file
+        fetch('region_data.json')
+            .then(response => response.json())
+            .then(data => {
+                allRegionsData = data;
+                displayRegions();
+            })
+            .catch(error => console.error('Error loading data:', error));
+
+        // Filter checkboxes
+        const filterCheckboxes = document.querySelectorAll('#apac, #emea, #noam');
+        const selectAllCheckbox = document.getElementById('selectAll');
+
+        filterCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    selectedGeos.add(e.target.value);
+                } else {
+                    selectedGeos.delete(e.target.value);
+                }
+                updateSelectAllCheckbox();
+                displayRegions();
+            });
+        });
+
+        selectAllCheckbox.addEventListener('change', (e) => {
+            filterCheckboxes.forEach(checkbox => {
+                checkbox.checked = e.target.checked;
+                if (e.target.checked) {
+                    selectedGeos.add(checkbox.value);
+                } else {
+                    selectedGeos.delete(checkbox.value);
+                }
+            });
+            displayRegions();
+        });
+
+        function updateSelectAllCheckbox() {
+            selectAllCheckbox.checked = selectedGeos.size === 3;
+        }
+
+        function displayRegions() {
+            const container = document.getElementById('regionsContainer');
+            const countElement = document.getElementById('regionCount');
+            container.innerHTML = '';
+
+            let regionCount = 0;
+
+            selectedGeos.forEach(geo => {
+                const regions = allRegionsData[geo] || [];
+                regionCount += regions.length;
+
+                regions.forEach(region => {
+                    const card = document.createElement('div');
+                    card.className = 'region-card';
+                    card.innerHTML = `
+                        <div class="region-name">${region.name}</div>
+                        <div class="region-info">
+                            <div class="info-row">
+                                <span class="info-label">Region Type:</span>
+                                <span class="info-value">${region.regionType}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Cloud Type:</span>
+                                <span class="info-value">${region.cloudType}</span>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            });
+
+            countElement.textContent = `Showing ${regionCount} region(s)`;
+
+            if (regionCount === 0) {
+                container.innerHTML = `
+                    <div style="grid-column: 1 / -1;">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📭</div>
+                            <p>No regions selected</p>
+                            <p style="font-size: 13px; color: #ccc;">Select at least one geographic region to see regions</p>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
