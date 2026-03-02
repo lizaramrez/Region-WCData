@@ -257,8 +257,8 @@
             background: #555;
         }
     </style>
-    <!-- Chart.js for graphical summaries -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chart.js for graphical summaries (local) -->
+    <script src="chart.js"></script>
 </head>
 <body>
     <div class="container">
@@ -537,59 +537,41 @@
         // Workloads UI
         function renderWorkloadList() {
             const wlContainer = document.getElementById('workloadList');
-            wlContainer.innerHTML = '';
             const keys = Object.keys(allWorkloads || {});
             if (keys.length === 0) {
                 wlContainer.innerHTML = '<div style="color:#999;font-size:13px">No workload data available.</div>';
                 return;
             }
-            let firstBtn = null;
+            let html = '';
             keys.forEach(wl => {
-                const wrapper = document.createElement('div');
-                wrapper.className = 'workload-wrapper';
-                const btn = document.createElement('div');
-                btn.className = 'workload-item';
-                btn.textContent = wl;
-                btn.addEventListener('click', () => selectWorkload(wl, btn));
-                wrapper.appendChild(btn);
-                // subnav area
-                const sub = document.createElement('div');
-                sub.className = 'subnav';
-                sub.style.display = 'none';
-                sub.style.marginLeft = '12px';
-                sub.innerHTML = `
-                    <div class="subitem" data-action="breakdown">Footprint breakdown</div>
-                    <div class="subitem" data-action="flex">Edit Region Flexibility</div>
-                `;
-                // attach subitem handlers
-                sub.querySelectorAll('.subitem').forEach(si=>{
-                    si.style.cursor = 'pointer';
-                    si.style.padding = '6px 0';
-                    si.style.fontSize = '13px';
-                    si.style.color = '#0078d4';
-                    si.style.display = 'block';
-                    si.style.marginLeft = '8px';
-                    si.addEventListener('click', e=>{
-                        e.stopPropagation();
-                        const action = si.getAttribute('data-action');
-                        // mark active
-                        sub.querySelectorAll('.subitem').forEach(x=>x.style.fontWeight='400');
-                        si.style.fontWeight='600';
-                        showDetailSection(action);
-                    });
-                });
-                // when workload first clicked, set breakdown bold
-                sub.querySelectorAll('.subitem').forEach(x=>x.style.fontWeight='400');
-                const first = sub.querySelector('.subitem[data-action="breakdown"]');
-                if (first) first.style.fontWeight='600';
-
-                wrapper.appendChild(sub);
-                wlContainer.appendChild(wrapper);
-                if (wl === 'IC3') firstBtn = btn;
-                if (!firstBtn) firstBtn = btn;
+                html += '<div class="workload-wrapper" style="margin-bottom:8px;">' +
+                    '<div class="workload-item" style="padding:8px;border:1px solid #e0e0e0;border-radius:4px;cursor:pointer;">' + wl + '</div>' +
+                    '<div class="subnav" style="display:none;margin-left:12px;margin-top:4px;">' +
+                        '<div class="subitem" data-action="breakdown" style="padding:6px 0;cursor:pointer;color:#0078d4;font-size:13px;">→ Footprint breakdown</div>' +
+                        '<div class="subitem" data-action="flex" style="padding:6px 0;cursor:pointer;color:#0078d4;font-size:13px;">→ Edit Region Flexibility</div>' +
+                    '</div>' +
+                '</div>';
             });
-            // auto-select IC3 if present, else first
-            if (firstBtn) firstBtn.click();
+            wlContainer.innerHTML = html;
+
+            document.querySelectorAll('.workload-item').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const wl = btn.textContent.trim();
+                    selectWorkload(wl, btn);
+                });
+            });
+
+            document.querySelectorAll('.subitem').forEach(si => {
+                si.addEventListener('click', e => {
+                    e.stopPropagation();
+                    const action = si.getAttribute('data-action');
+                    showDetailSection(action);
+                });
+            });
+
+            const allBtns = Array.from(document.querySelectorAll('.workload-item'));
+            const targetBtn = allBtns.find(b => b.textContent.trim() === 'IC3') || allBtns[0];
+            if (targetBtn) targetBtn.click();
         }
 
         let selectedWorkloadBtn = null;
@@ -603,29 +585,34 @@
             document.getElementById('selectedWorkloadName').textContent = `${name} - Deployment Details`;
             document.getElementById('workloadDetailSub').textContent = `Currently deployed regions for ${name}`;
             // reset detail sub-tabs to Regions
-
-            document.getElementById('regionsView').style.display = 'block';
-            document.getElementById('breakdownView').style.display = 'none';
-            document.getElementById('flexView').style.display = 'none';
-            renderWorkloadRegions(name);
+            // render regions and expand subnav; default to breakdown view
+            renderWorkloadRegions(name, btnEl);
         }
 
-        function renderWorkloadRegions(name) {
+        function renderWorkloadRegions(name, btnEl) {
             currentWorkloadName = name;
-            showDetailSection('regions');
             const container = document.getElementById('workloadRegionsContainer');
-            // collapse other workload subnav items and expand this one's subnav
+            // collapse other workload subnavs
             document.querySelectorAll('.workload-wrapper').forEach(wrap=>{
                 const sub = wrap.querySelector('.subnav');
                 if (sub) sub.style.display = 'none';
             });
-            const parentWrapper = btnEl.parentElement;
-            if (parentWrapper && parentWrapper.classList.contains('workload-wrapper')) {
+            // expand this workload's subnav using the passed button element
+            let parentWrapper = null;
+            if (btnEl && btnEl.parentElement && btnEl.parentElement.classList.contains('workload-wrapper')) parentWrapper = btnEl.parentElement;
+            else {
+                // fallback: find the workload-item element by name
+                const elm = Array.from(document.querySelectorAll('.workload-item')).find(b=>b.textContent.trim()===name);
+                if (elm && elm.parentElement && elm.parentElement.classList.contains('workload-wrapper')) parentWrapper = elm.parentElement;
+            }
+            if (parentWrapper) {
                 const mySub = parentWrapper.querySelector('.subnav');
                 if (mySub) mySub.style.display = 'block';
+                // set default bold on breakdown subitem
+                const sitems = mySub.querySelectorAll('.subitem');
+                sitems.forEach(si=>{ si.style.fontWeight = (si.getAttribute('data-action')==='breakdown') ? '600' : '400'; });
             }
-            // set current workload and default to breakdown view
-            currentWorkloadName = name;
+            // default to breakdown view when selecting a workload
             showDetailSection('breakdown');
             container.innerHTML = '';
             const entries = allWorkloads[name] || [];
