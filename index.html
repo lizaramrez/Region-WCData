@@ -609,11 +609,15 @@
             currentWorkloadName = name;
             showDetailSection('regions');
             const container = document.getElementById('workloadRegionsContainer');
-            // collapse other workload subnavs and expand this one
-            document.querySelectorAll('#workloadList .subnav').forEach(el=>el.style.display='none');
-            const mySub = btnEl.nextElementSibling;
-            if (mySub && mySub.classList.contains('subnav')) {
-                mySub.style.display = 'block';
+            // collapse other workload subnav items and expand this one's subnav
+            document.querySelectorAll('.workload-wrapper').forEach(wrap=>{
+                const sub = wrap.querySelector('.subnav');
+                if (sub) sub.style.display = 'none';
+            });
+            const parentWrapper = btnEl.parentElement;
+            if (parentWrapper && parentWrapper.classList.contains('workload-wrapper')) {
+                const mySub = parentWrapper.querySelector('.subnav');
+                if (mySub) mySub.style.display = 'block';
             }
             // default to breakdown view when selecting workload
             showDetailSection('breakdown');
@@ -897,14 +901,29 @@
             const regionData = labels.map(l=>byService[l].regions);
             const coresData = labels.map(l=>byService[l].cores);
             const div = document.getElementById('serviceBreakdownCharts');
-            div.innerHTML = '<canvas id="serviceRegionsChart" style="max-width:100%;height:200px;margin-bottom:20px"></canvas>'+
-                            '<canvas id="serviceCoresChart" style="max-width:100%;height:200px"></canvas>';
+            div.innerHTML = '<canvas id="serviceRegionsChart"></canvas><canvas id="serviceCoresChart"></canvas>';
             // regions per service bar
-            const ctx1 = document.getElementById('serviceRegionsChart').getContext('2d');
-            new Chart(ctx1,{type:'bar',data:{labels,datasets:[{label:'Regions',data:regionData,backgroundColor:'#0078d4'}]},options:{responsive:false}});
+            const canvas1 = document.getElementById('serviceRegionsChart');
+            canvas1.width = div.offsetWidth || 500;
+            canvas1.height = 200;
+            const ctx1 = canvas1.getContext('2d');
+            if (window.srvRegChart) window.srvRegChart.destroy();
+            window.srvRegChart = new Chart(ctx1,{
+                type:'bar',
+                data:{labels,datasets:[{label:'Regions per Service',data:regionData,backgroundColor:'#0078d4'}]},
+                options:{responsive:false, scales:{y:{beginAtZero:true}}}
+            });
             // cores per service bar
-            const ctx2 = document.getElementById('serviceCoresChart').getContext('2d');
-            new Chart(ctx2,{type:'bar',data:{labels,datasets:[{label:'Cores',data:coresData,backgroundColor:'#00c853'}]},options:{responsive:false}});
+            const canvas2 = document.getElementById('serviceCoresChart');
+            canvas2.width = div.offsetWidth || 500;
+            canvas2.height = 200;
+            const ctx2 = canvas2.getContext('2d');
+            if (window.srvCoresChart) window.srvCoresChart.destroy();
+            window.srvCoresChart = new Chart(ctx2,{
+                type:'bar',
+                data:{labels,datasets:[{label:'Cores per Service',data:coresData,backgroundColor:'#00c853'}]},
+                options:{responsive:false, scales:{y:{beginAtZero:true}}}
+            });
         }
 
         function renderFlexEditor(name) {
