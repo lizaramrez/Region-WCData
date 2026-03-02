@@ -69,3 +69,49 @@ print("Data processed and saved to region_data.json")
 print(f"APAC regions: {len(geo_regions['APAC'])}")
 print(f"EMEA regions: {len(geo_regions['EMEA'])}")
 print(f"NOAM regions: {len(geo_regions['NOAM'])}")
+
+# === Workloads: try to create workloads.json from available sources ===
+workloads = {}
+
+# 1) Try to read Workloads.csv (expected columns: Workload,Region,Status)
+try:
+    wf = pd.read_csv('Workloads.csv')
+    for _, r in wf.iterrows():
+        wl = str(r.get('Workload')).strip()
+        region = str(r.get('Region')).strip()
+        status = str(r.get('Status')).strip() if pd.notna(r.get('Status')) else 'Deployed'
+        if wl and wl not in ['nan', 'None']:
+            workloads.setdefault(wl, []).append({'region': region, 'status': status})
+    print('Loaded workloads from Workloads.csv')
+except Exception:
+    # 2) Try to read a sheet named 'Workloads' from RegionDataFinal.xlsx
+    try:
+        import openpyxl
+        wb = openpyxl.load_workbook('RegionDataFinal.xlsx', data_only=True)
+        sheet_name = None
+        for name in wb.sheetnames:
+            if 'work' in name.lower():
+                sheet_name = name
+                break
+        if sheet_name:
+            ws = wb[sheet_name]
+            rows = list(ws.values)
+            if rows:
+                headers = [str(h).strip() for h in rows[0]]
+                for row in rows[1:]:
+                    rowd = {headers[i]: row[i] if i < len(row) else None for i in range(len(headers))}
+                    wl = str(rowd.get('Workload') or rowd.get('workload') or '').strip()
+                    region = str(rowd.get('Region') or rowd.get('region') or '').strip()
+                    status = str(rowd.get('Status') or rowd.get('status') or 'Deployed').strip()
+                    if wl:
+                        workloads.setdefault(wl, []).append({'region': region, 'status': status})
+            print(f"Loaded workloads from sheet '{sheet_name}' in RegionDataFinal.xlsx")
+    except Exception:
+        # no workloads source found — produce empty placeholders for expected workloads
+        workloads = {'IC3': [], 'OPG': []}
+
+# Save workloads.json
+with open('workloads.json', 'w') as wf:
+    json.dump(workloads, wf, indent=2)
+
+print('Workloads processed and saved to workloads.json')

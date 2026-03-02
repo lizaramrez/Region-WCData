@@ -207,6 +207,13 @@
 </head>
 <body>
     <div class="container">
+        <div style="width:100%; padding:12px 24px; background:#fff; border-bottom:1px solid #eee; display:flex; gap:12px; align-items:center;">
+            <button id="tabRegions" class="tab-btn" style="background:#0078d4;color:#fff;padding:8px 14px;border-radius:6px;border:none;cursor:pointer">Regions</button>
+            <button id="tabWorkloads" class="tab-btn" style="background:transparent;color:#0078d4;padding:8px 14px;border-radius:6px;border:1px solid transparent;cursor:pointer">Workloads</button>
+        </div>
+
+        <!-- TAB: Regions -->
+        <div id="tabContentRegions" style="display:block; width:100%">
         <!-- LEFT PANEL - FILTERS -->
         <div class="filter-section">
             <h2>🌍 Geographic Regions</h2>
@@ -240,20 +247,46 @@
             </div>
             <div id="regionsContainer" class="regions-grid"></div>
         </div>
+        </div>
+
+        <!-- TAB: Workloads -->
+        <div id="tabContentWorkloads" style="display:none; width:100%;">
+            <div style="display:flex; height:calc(100vh - 64px);">
+                <div style="width:260px; background:#fff; border-right:1px solid #eee; padding:18px; overflow:auto;">
+                    <h3 style="color:#0078d4; margin-bottom:12px">Workloads</h3>
+                    <div id="workloadList">
+                        <!-- workload items injected here -->
+                    </div>
+                </div>
+                <div style="flex:1; padding:24px; overflow:auto; background:#fafafa;">
+                    <div style="margin-bottom:18px">
+                        <h2 style="color:#0078d4; margin:0">Workload details</h2>
+                        <div id="workloadSub" style="color:#666; font-size:13px">Select a workload to view deployed regions and suggestions</div>
+                    </div>
+                    <div id="workloadRegionsContainer" class="regions-grid"></div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
         let allRegionsData = {};
         let selectedGeos = new Set(['APAC', 'EMEA', 'NOAM']);
 
-        // Load data from JSON file
-        fetch('region_data.json')
-            .then(response => response.json())
-            .then(data => {
-                allRegionsData = data;
-                displayRegions();
-            })
-            .catch(error => console.error('Error loading data:', error));
+        // Load data from JSON files
+        Promise.all([
+            fetch('region_data.json').then(r => r.json()),
+            fetch('workloads.json').then(r => r.json())
+        ]).then(([regionsData, workloadsData]) => {
+            allRegionsData = regionsData;
+            allWorkloads = workloadsData;
+            displayRegions();
+            renderWorkloadList();
+        }).catch(err => {
+            console.error('Error loading data:', err);
+        });
+
+        let allWorkloads = {};
 
         // Filter checkboxes
         const filterCheckboxes = document.querySelectorAll('#apac, #emea, #noam');
@@ -331,6 +364,84 @@
                     </div>
                 `;
             }
+        }
+
+        // --- Tabs handling ---
+        const tabRegionsBtn = document.getElementById('tabRegions');
+        const tabWorkloadsBtn = document.getElementById('tabWorkloads');
+        const tabContentRegions = document.getElementById('tabContentRegions');
+        const tabContentWorkloads = document.getElementById('tabContentWorkloads');
+
+        tabRegionsBtn.addEventListener('click', () => {
+            tabRegionsBtn.style.background = '#0078d4';
+            tabRegionsBtn.style.color = '#fff';
+            tabWorkloadsBtn.style.background = 'transparent';
+            tabWorkloadsBtn.style.color = '#0078d4';
+            tabContentRegions.style.display = 'block';
+            tabContentWorkloads.style.display = 'none';
+        });
+
+        tabWorkloadsBtn.addEventListener('click', () => {
+            tabWorkloadsBtn.style.background = '#0078d4';
+            tabWorkloadsBtn.style.color = '#fff';
+            tabRegionsBtn.style.background = 'transparent';
+            tabRegionsBtn.style.color = '#0078d4';
+            tabContentRegions.style.display = 'none';
+            tabContentWorkloads.style.display = 'block';
+        });
+
+        // --- Workloads UI ---
+        function renderWorkloadList(){
+            const wlContainer = document.getElementById('workloadList');
+            wlContainer.innerHTML = '';
+            const keys = Object.keys(allWorkloads || {});
+            if(keys.length === 0){
+                wlContainer.innerHTML = '<div style="color:#999;">No workload data available. Upload `Workloads.csv` or add a sheet named "Workloads" in the Excel.</div>';
+                return;
+            }
+            keys.forEach((wl, idx) => {
+                const btn = document.createElement('div');
+                btn.style.padding = '10px';
+                btn.style.borderRadius = '6px';
+                btn.style.cursor = 'pointer';
+                btn.style.marginBottom = '8px';
+                btn.style.border = '1px solid #eee';
+                btn.textContent = wl;
+                btn.addEventListener('click', () => selectWorkload(wl, btn));
+                wlContainer.appendChild(btn);
+            });
+        }
+
+        let selectedWorkloadBtn = null;
+        function selectWorkload(name, btnEl){
+            if(selectedWorkloadBtn) selectedWorkloadBtn.style.background = 'transparent';
+            btnEl.style.background = '#e7f1f8';
+            selectedWorkloadBtn = btnEl;
+            document.getElementById('workloadSub').textContent = `Showing regions for ${name}`;
+            renderWorkloadRegions(name);
+        }
+
+        function renderWorkloadRegions(name){
+            const container = document.getElementById('workloadRegionsContainer');
+            container.innerHTML = '';
+            const entries = allWorkloads[name] || [];
+            // Create a set of deployed regions for quick lookup
+            const deployed = new Set(entries.filter(e=>e.status && e.status.toLowerCase().includes('deploy')).map(e=>e.region));
+
+            // Show all regions in selected GEOs (optional) and mark deployment status if present
+            const allRegionsFlat = [].concat(...Object.values(allRegionsData || {}));
+            if(entries.length === 0){
+                container.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-icon">📭</div><p>No deployments found for this workload</p></div>';
+                return;
+            }
+
+            entries.forEach(reg => {
+                const card = document.createElement('div');
+                card.className = 'region-card';
+                const regionalInfo = allRegionsFlat.find(r=>r.name === reg.region) || {};
+                card.innerHTML = `\n                    <div class="region-name">${reg.region}</div>\n                    <div class="region-info">\n                        <div class="info-row"><span class="info-label">Region Type:</span><span class="info-value">${regionalInfo.regionType || '—'}</span></div>\n                        <div class="info-row"><span class="info-label">Cloud Type:</span><span class="info-value">${regionalInfo.cloudType || '—'}</span></div>\n                        <div class="info-row"><span class="info-label">Status:</span><span class="info-value">${reg.status}</span></div>\n                    </div>\n                `;
+                container.appendChild(card);
+            });
         }
     </script>
 </body>
