@@ -70,45 +70,65 @@ print(f"APAC regions: {len(geo_regions['APAC'])}")
 print(f"EMEA regions: {len(geo_regions['EMEA'])}")
 print(f"NOAM regions: {len(geo_regions['NOAM'])}")
 
-# === Workloads: try to create workloads.json from available sources ===
+# === Workloads: create workloads.json from OPG and IC3 region data CSVs ===
 workloads = {}
 
-# 1) Try to read Workloads.csv (expected columns: Workload,Region,Status)
-try:
-    wf = pd.read_csv('Workloads.csv')
-    for _, r in wf.iterrows():
-        wl = str(r.get('Workload')).strip()
-        region = str(r.get('Region')).strip()
-        status = str(r.get('Status')).strip() if pd.notna(r.get('Status')) else 'Deployed'
-        if wl and wl not in ['nan', 'None']:
-            workloads.setdefault(wl, []).append({'region': region, 'status': status})
-    print('Loaded workloads from Workloads.csv')
-except Exception:
-    # 2) Try to read a sheet named 'Workloads' from RegionDataFinal.xlsx
+def add_workload_entry(workload_key, service_name, namespace, geo, cores_str, total_regions):
+    """Add a workload entry to the workloads dictionary."""
+    # parse cores string (may contain commas)
+    cores = 0
     try:
-        import openpyxl
-        wb = openpyxl.load_workbook('RegionDataFinal.xlsx', data_only=True)
-        sheet_name = None
-        for name in wb.sheetnames:
-            if 'work' in name.lower():
-                sheet_name = name
-                break
-        if sheet_name:
-            ws = wb[sheet_name]
-            rows = list(ws.values)
-            if rows:
-                headers = [str(h).strip() for h in rows[0]]
-                for row in rows[1:]:
-                    rowd = {headers[i]: row[i] if i < len(row) else None for i in range(len(headers))}
-                    wl = str(rowd.get('Workload') or rowd.get('workload') or '').strip()
-                    region = str(rowd.get('Region') or rowd.get('region') or '').strip()
-                    status = str(rowd.get('Status') or rowd.get('status') or 'Deployed').strip()
-                    if wl:
-                        workloads.setdefault(wl, []).append({'region': region, 'status': status})
-            print(f"Loaded workloads from sheet '{sheet_name}' in RegionDataFinal.xlsx")
-    except Exception:
-        # no workloads source found — produce empty placeholders for expected workloads
-        workloads = {'IC3': [], 'OPG': []}
+        cores = int(cores_str.replace(',', '') if isinstance(cores_str, str) else cores_str)
+    except (ValueError, AttributeError):
+        cores = 0
+    
+    entry = {
+        'Workload': workload_key,
+        'Service': service_name,
+        'Namespace': namespace,
+        'Geo': geo,
+        'Cores': cores,
+        'TotalRegions': int(total_regions) if total_regions else 0
+    }
+    workloads.setdefault(workload_key, []).append(entry)
+
+# Load OPGRegionData.csv (skip first row with geo headers, use row 2 as header)
+try:
+    opg_df = pd.read_csv('OPGRegionData.csv', skiprows=1)
+    for _, row in opg_df.iterrows():
+        service_name = str(row.get('Service Name', 'Unknown')).strip()
+        namespace = str(row.get('Namespace', 'Unknown')).strip()
+        geo = str(row.get('Geo', 'Unknown')).strip()
+        cores = row.get('# of Cores', 0)
+        total_regions = row.get('# of Total Regions', 0)
+        if service_name and namespace and service_name != 'Service Name':
+            add_workload_entry('OPG', service_name, namespace, geo, cores, total_regions)
+    print(f'Loaded {len(opg_df)} rows from OPGRegionData.csv')
+except FileNotFoundError:
+    print('OPGRegionData.csv not found')
+except Exception as e:
+    print('Error reading OPGRegionData.csv:', e)
+
+# Load IC3RegionData.csv (skip first row with geo headers, use row 2 as header)
+try:
+    ic3_df = pd.read_csv('IC3RegionData.csv', skiprows=1)
+    for _, row in ic3_df.iterrows():
+        service_name = str(row.get('Service Name', 'Unknown')).strip()
+        namespace = str(row.get('Namespace', 'Unknown')).strip()
+        geo = str(row.get('Geo', 'Unknown')).strip()
+        cores = row.get('# of Cores', 0)
+        total_regions = row.get('# of Total Regions', 0)
+        if service_name and namespace and service_name != 'Service Name':
+            add_workload_entry('IC3', service_name, namespace, geo, cores, total_regions)
+    print(f'Loaded {len(ic3_df)} rows from IC3RegionData.csv')
+except FileNotFoundError:
+    print('IC3RegionData.csv not found')
+except Exception as e:
+    print('Error reading IC3RegionData.csv:', e)
+
+# if still empty, provide placeholders
+if not workloads:
+    workloads = {'IC3': [], 'OPG': []}
 
 # Save workloads.json
 with open('workloads.json', 'w') as wf:

@@ -543,8 +543,13 @@
             keys.forEach(wl => {
                 const entries = allWorkloads[wl] || [];
                 const deployedCount = entries.length;
+                // determine core column dynamically
+                let coreKey = null;
+                if(entries.length){
+                    Object.keys(entries[0]).forEach(k=>{ if(!coreKey && k.toLowerCase().includes('core')) coreKey = k; });
+                }
                 let totalCores = 0;
-                entries.forEach(e=>{ totalCores += parseInt(e.cores) || 0; });
+                entries.forEach(e=>{ totalCores += parseInt(coreKey ? e[coreKey] : (e.cores||0)) || 0; });
                 const statCard = document.createElement('div');
                 statCard.className = 'region-card';
                 statCard.style.cursor = 'default';
@@ -587,13 +592,24 @@
             const services = {};
             const geos = { APAC:0, EMEA:0, NOAM:0 };
             const coresByNs = {};
+            // determine dynamic column names
+            let serviceKey = null;
+            let coreKey = null;
+            if(entries.length){
+                const sample = entries[0];
+                Object.keys(sample).forEach(k=>{
+                    const kl = k.toLowerCase();
+                    if(!serviceKey && (kl.includes('service'))) serviceKey = k;
+                    if(!coreKey && (kl.includes('core'))) coreKey = k;
+                });
+            }
             entries.forEach(e => {
                 // service grouping
-                const svc = e.service || e.serviceName || 'Unknown';
+                const svc = (serviceKey && e[serviceKey]) || e.service || e.serviceName || 'Unknown';
                 services[svc] = (services[svc] || 0) + 1;
                 // cores grouping
                 const ns = e.namespace || 'default';
-                const cores = parseInt(e.cores) || 0;
+                const cores = parseInt(coreKey ? e[coreKey] : (e.cores||0)) || 0;
                 coresByNs[ns] = (coresByNs[ns] || 0) + cores;
                 // geo grouping via region map
                 Object.entries(allRegionsData).forEach(([geo, regions]) => {

@@ -1,0 +1,5 @@
+Workload,Region,Cores,Namespace,Service
+IC3,East US,4,ns1,SvcA
+IC3,West US,8,ns1,SvcB
+OPG,North Europe,2,ns2,SvcA
+OPG,South India,16,ns3,SvcC

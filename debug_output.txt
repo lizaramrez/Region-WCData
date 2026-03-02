@@ -1,0 +1,99 @@
+OPG columns: ['Unnamed: 0', 'Unnamed: 1', 'Unnamed: 2', 'Unnamed: 3', 'Unnamed: 4', 'Unnamed: 5', 'Unnamed: 6', 'Unnamed: 7', 'APAC', 'APAC.1', 'APAC.2', 'APAC.3', 'APAC.4', 'APAC.5', 'APAC.6', 'APAC.7', 'APAC.8', 'APAC.9', 'APAC.10', 'APAC.11', 'EMEA', 'EMEA.1', 'EMEA.2', 'EMEA.3', 'EMEA.4', 'EMEA.5', 'EMEA.6', 'EMEA.7', 'EMEA.8', 'EMEA.9', 'EMEA.10', 'EMEA.11', 'EMEA.12', 'EMEA.13', 'EMEA.14', 'NOAM', 'NOAM.1', 'NOAM.2', 'NOAM.3', 'NOAM.4', 'NOAM.5', 'NOAM.6', 'NOAM.7', 'NOAM.8', 'NOAM.9', 'NOAM.10']
+OPG first row:
+Unnamed: 0            Service Name
+Unnamed: 1               Namespace
+Unnamed: 2                     Geo
+Unnamed: 3                    Ring
+Unnamed: 4      # of Total Regions
+Unnamed: 5      # of Major Regions
+Unnamed: 6    # of Smaller Regions
+Unnamed: 7              # of Cores
+APAC                Malaysia South
+APAC.1                  West India
+APAC.2              Australia East
+APAC.3               Central India
+APAC.4           Indonesia Central
+APAC.5                  Japan East
+APAC.6                  Japan West
+APAC.7               Korea Central
+APAC.8               Malaysia West
+APAC.9              Southeast Asia
+APAC.10               Taiwan North
+APAC.11                  Hong Kong
+EMEA                 Qatar Central
+EMEA.1            Israel Northwest
+EMEA.2              France Central
+EMEA.3        Germany West Central
+EMEA.4                 Italy North
+EMEA.5                North Europe
+EMEA.6                 Norway East
+EMEA.7              Poland Central
+EMEA.8          South Africa North
+EMEA.9               Spain Central
+EMEA.10             Sweden Central
+EMEA.11          Switzerland North
+EMEA.12                  UAE North
+EMEA.13                West Europe
+EMEA.14              UK West/South
+NOAM                  Brazil South
+NOAM.1              Canada Central
+NOAM.2                  Central US
+NOAM.3                     East US
+NOAM.4                   East US 2
+NOAM.5              Mexico Central
+NOAM.6            North Central US
+NOAM.7            South Central US
+NOAM.8                     West US
+NOAM.9                   West US 2
+NOAM.10                  West US 3
+Name: 0, dtype: str
+
+IC3 columns: ['Unnamed: 0', 'Unnamed: 1', 'Unnamed: 2', 'Unnamed: 3', 'Unnamed: 4', 'Unnamed: 5', 'Unnamed: 6', 'Unnamed: 7', 'APAC', 'APAC.1', 'APAC.2', 'APAC.3', 'APAC.4', 'APAC.5', 'APAC.6', 'APAC.7', 'APAC.8', 'APAC.9', 'APAC.10', 'APAC.11', 'EMEA', 'EMEA.1', 'EMEA.2', 'EMEA.3', 'EMEA.4', 'EMEA.5', 'EMEA.6', 'EMEA.7', 'EMEA.8', 'EMEA.9', 'EMEA.10', 'EMEA.11', 'EMEA.12', 'EMEA.13', 'EMEA.14', 'NOAM', 'NOAM.1', 'NOAM.2', 'NOAM.3', 'NOAM.4', 'NOAM.5', 'NOAM.6', 'NOAM.7', 'NOAM.8', 'NOAM.9', 'NOAM.10']
+IC3 first row:
+Unnamed: 0            Service Name
+Unnamed: 1               Namespace
+Unnamed: 2                     Geo
+Unnamed: 3                    Ring
+Unnamed: 4      # of Total Regions
+Unnamed: 5      # of Major Regions
+Unnamed: 6    # of Smaller Regions
+Unnamed: 7              # of Cores
+APAC                Malaysia South
+APAC.1                  West India
+APAC.2              Australia East
+APAC.3               Central India
+APAC.4           Indonesia Central
+APAC.5                  Japan East
+APAC.6                  Japan West
+APAC.7               Korea Central
+APAC.8               Malaysia West
+APAC.9              Southeast Asia
+APAC.10               Taiwan North
+APAC.11                  Hong Kong
+EMEA                 Qatar Central
+EMEA.1            Israel Northwest
+EMEA.2              France Central
+EMEA.3        Germany West Central
+EMEA.4                 Italy North
+EMEA.5                North Europe
+EMEA.6                 Norway East
+EMEA.7              Poland Central
+EMEA.8          South Africa North
+EMEA.9               Spain Central
+EMEA.10             Sweden Central
+EMEA.11          Switzerland North
+EMEA.12                  UAE North
+EMEA.13                West Europe
+EMEA.14              UK West/South
+NOAM                  Brazil South
+NOAM.1              Canada Central
+NOAM.2                  Central US
+NOAM.3                     East US
+NOAM.4                   East US 2
+NOAM.5              Mexico Central
+NOAM.6            North Central US
+NOAM.7            South Central US
+NOAM.8                     West US
+NOAM.9                   West US 2
+NOAM.10                  West US 3
+Name: 0, dtype: str

@@ -1,0 +1,6 @@
+file appears to be DRM/encrypted; aborting inspection
+exception reading workbook: ValueError('encrypted file')
+Traceback (most recent call last):
+  File "C:\Users\lizaramrez\OneDrive - Microsoft\Desktop\VS Code Projects\Region-WCData\inspect_excel.py", line 13, in <module>
+    raise ValueError('encrypted file')
+ValueError: encrypted file

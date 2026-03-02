@@ -1,4 +1,342 @@
 {
-  "IC3": [],
-  "OPG": []
+  "OPG": [
+    {
+      "Workload": "OPG",
+      "Service": "Test Service1",
+      "Namespace": "opg-test-service1",
+      "Geo": "APAC",
+      "Cores": 27219,
+      "TotalRegions": 7
+    },
+    {
+      "Workload": "OPG",
+      "Service": "Test Service1",
+      "Namespace": "opg-test-service1",
+      "Geo": "EMEA",
+      "Cores": 35667,
+      "TotalRegions": 6
+    },
+    {
+      "Workload": "OPG",
+      "Service": "Test Service 1",
+      "Namespace": "opg-test-service1",
+      "Geo": "NOAM",
+      "Cores": 40233,
+      "TotalRegions": 5
+    },
+    {
+      "Workload": "OPG",
+      "Service": "Test Service 2",
+      "Namespace": "opg-test-service2",
+      "Geo": "APAC",
+      "Cores": 12307,
+      "TotalRegions": 7
+    },
+    {
+      "Workload": "OPG",
+      "Service": "Test Service 2",
+      "Namespace": "opg-test-service2",
+      "Geo": "EMEA",
+      "Cores": 13503,
+      "TotalRegions": 6
+    },
+    {
+      "Workload": "OPG",
+      "Service": "Test Service 2",
+      "Namespace": "opg-test-service2",
+      "Geo": "NOAM",
+      "Cores": 15030,
+      "TotalRegions": 5
+    },
+    {
+      "Workload": "OPG",
+      "Service": "Test Service 3",
+      "Namespace": "opg-test-service3",
+      "Geo": "APAC",
+      "Cores": 24296,
+      "TotalRegions": 7
+    },
+    {
+      "Workload": "OPG",
+      "Service": "Test Service 3",
+      "Namespace": "opg-test-service3",
+      "Geo": "EMEA",
+      "Cores": 41105,
+      "TotalRegions": 6
+    },
+    {
+      "Workload": "OPG",
+      "Service": "Test Service 3",
+      "Namespace": "opg-test-service3",
+      "Geo": "NOAM",
+      "Cores": 44764,
+      "TotalRegions": 5
+    },
+    {
+      "Workload": "OPG",
+      "Service": "Test Service 4",
+      "Namespace": "opg-test-service4",
+      "Geo": "APAC",
+      "Cores": 40252,
+      "TotalRegions": 5
+    },
+    {
+      "Workload": "OPG",
+      "Service": "Test Service 4",
+      "Namespace": "opg-test-service4",
+      "Geo": "EMEA",
+      "Cores": 84585,
+      "TotalRegions": 7
+    },
+    {
+      "Workload": "OPG",
+      "Service": "Test Service 4",
+      "Namespace": "opg-test-service4",
+      "Geo": "NOAM",
+      "Cores": 101479,
+      "TotalRegions": 8
+    },
+    {
+      "Workload": "OPG",
+      "Service": "Test Service 5",
+      "Namespace": "opg-test-service5",
+      "Geo": "APAC",
+      "Cores": 4896,
+      "TotalRegions": 7
+    },
+    {
+      "Workload": "OPG",
+      "Service": "Test Service 5",
+      "Namespace": "opg-test-service5",
+      "Geo": "EMEA",
+      "Cores": 8156,
+      "TotalRegions": 5
+    },
+    {
+      "Workload": "OPG",
+      "Service": "Test Service 5",
+      "Namespace": "opg-test-service5",
+      "Geo": "NOAM",
+      "Cores": 57805,
+      "TotalRegions": 5
+    },
+    {
+      "Workload": "OPG",
+      "Service": "Test Service 6",
+      "Namespace": "opg-test-service6",
+      "Geo": "APAC",
+      "Cores": 8968,
+      "TotalRegions": 6
+    },
+    {
+      "Workload": "OPG",
+      "Service": "Test Service 6",
+      "Namespace": "opg-test-service6",
+      "Geo": "EMEA",
+      "Cores": 32102,
+      "TotalRegions": 7
+    },
+    {
+      "Workload": "OPG",
+      "Service": "Test Service 6",
+      "Namespace": "opg-test-service6",
+      "Geo": "NOAM",
+      "Cores": 69559,
+      "TotalRegions": 5
+    },
+    {
+      "Workload": "OPG",
+      "Service": "Test Service 7",
+      "Namespace": "opg-test-service7",
+      "Geo": "APAC",
+      "Cores": 1938,
+      "TotalRegions": 3
+    },
+    {
+      "Workload": "OPG",
+      "Service": "Test Service 7",
+      "Namespace": "opg-test-service7",
+      "Geo": "EMEA",
+      "Cores": 2381,
+      "TotalRegions": 3
+    },
+    {
+      "Workload": "OPG",
+      "Service": "Test Service 7",
+      "Namespace": "opg-test-service7",
+      "Geo": "NOAM",
+      "Cores": 2662,
+      "TotalRegions": 5
+    }
+  ],
+  "IC3": [
+    {
+      "Workload": "IC3",
+      "Service": "Call Controller",
+      "Namespace": "ic3-calling-callcontroller",
+      "Geo": "APAC",
+      "Cores": 27219,
+      "TotalRegions": 7
+    },
+    {
+      "Workload": "IC3",
+      "Service": "Call Controller",
+      "Namespace": "ic3-calling-callcontroller",
+      "Geo": "EMEA",
+      "Cores": 35667,
+      "TotalRegions": 6
+    },
+    {
+      "Workload": "IC3",
+      "Service": "Call Controller",
+      "Namespace": "ic3-calling-callcontroller",
+      "Geo": "NOAM",
+      "Cores": 40233,
+      "TotalRegions": 5
+    },
+    {
+      "Workload": "IC3",
+      "Service": "Conversation",
+      "Namespace": "ic3-calling-conversation",
+      "Geo": "APAC",
+      "Cores": 12307,
+      "TotalRegions": 7
+    },
+    {
+      "Workload": "IC3",
+      "Service": "Conversation",
+      "Namespace": "ic3-calling-conversation",
+      "Geo": "EMEA",
+      "Cores": 13503,
+      "TotalRegions": 6
+    },
+    {
+      "Workload": "IC3",
+      "Service": "Conversation",
+      "Namespace": "ic3-calling-conversation",
+      "Geo": "NOAM",
+      "Cores": 15030,
+      "TotalRegions": 5
+    },
+    {
+      "Workload": "IC3",
+      "Service": "Call Controller Flighting Proxy",
+      "Namespace": "ic3-calling-enterpriseproxy",
+      "Geo": "APAC",
+      "Cores": 24296,
+      "TotalRegions": 7
+    },
+    {
+      "Workload": "IC3",
+      "Service": "Call Controller Flighting Proxy",
+      "Namespace": "ic3-calling-enterpriseproxy",
+      "Geo": "EMEA",
+      "Cores": 41105,
+      "TotalRegions": 6
+    },
+    {
+      "Workload": "IC3",
+      "Service": "Call Controller Flighting Proxy",
+      "Namespace": "ic3-calling-enterpriseproxy",
+      "Geo": "NOAM",
+      "Cores": 44764,
+      "TotalRegions": 5
+    },
+    {
+      "Workload": "IC3",
+      "Service": "SkypeMediaController",
+      "Namespace": "ic3-media-mc",
+      "Geo": "APAC",
+      "Cores": 40252,
+      "TotalRegions": 5
+    },
+    {
+      "Workload": "IC3",
+      "Service": "SkypeMediaController",
+      "Namespace": "ic3-media-mc",
+      "Geo": "EMEA",
+      "Cores": 84585,
+      "TotalRegions": 7
+    },
+    {
+      "Workload": "IC3",
+      "Service": "SkypeMediaController",
+      "Namespace": "ic3-media-mc",
+      "Geo": "NOAM",
+      "Cores": 101479,
+      "TotalRegions": 8
+    },
+    {
+      "Workload": "IC3",
+      "Service": "Messaging API Service",
+      "Namespace": "ic3-messaging-mfe",
+      "Geo": "APAC",
+      "Cores": 4896,
+      "TotalRegions": 7
+    },
+    {
+      "Workload": "IC3",
+      "Service": "Messaging API Service",
+      "Namespace": "ic3-messaging-mfe",
+      "Geo": "EMEA",
+      "Cores": 8156,
+      "TotalRegions": 5
+    },
+    {
+      "Workload": "IC3",
+      "Service": "Messaging API Service",
+      "Namespace": "ic3-messaging-mfe",
+      "Geo": "NOAM",
+      "Cores": 57805,
+      "TotalRegions": 5
+    },
+    {
+      "Workload": "IC3",
+      "Service": "Messaging API Service",
+      "Namespace": "ic3-messaging-mfeconsumer",
+      "Geo": "APAC",
+      "Cores": 8968,
+      "TotalRegions": 6
+    },
+    {
+      "Workload": "IC3",
+      "Service": "Messaging API Service",
+      "Namespace": "ic3-messaging-mfeconsumer",
+      "Geo": "EMEA",
+      "Cores": 32102,
+      "TotalRegions": 7
+    },
+    {
+      "Workload": "IC3",
+      "Service": "Messaging API Service",
+      "Namespace": "ic3-messaging-mfeconsumer",
+      "Geo": "NOAM",
+      "Cores": 69559,
+      "TotalRegions": 5
+    },
+    {
+      "Workload": "IC3",
+      "Service": "Messaging Thread Service",
+      "Namespace": "ic3-messaging-threads",
+      "Geo": "APAC",
+      "Cores": 1938,
+      "TotalRegions": 3
+    },
+    {
+      "Workload": "IC3",
+      "Service": "Messaging Thread Service",
+      "Namespace": "ic3-messaging-threads",
+      "Geo": "EMEA",
+      "Cores": 2381,
+      "TotalRegions": 3
+    },
+    {
+      "Workload": "IC3",
+      "Service": "Messaging Thread Service",
+      "Namespace": "ic3-messaging-threads",
+      "Geo": "NOAM",
+      "Cores": 2662,
+      "TotalRegions": 5
+    }
+  ]
 }

@@ -1,0 +1,2 @@
+openpyxl failed: File is not a zip file
+xlrd also failed: Can't find workbook in OLE2 compound document

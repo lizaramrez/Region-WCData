@@ -1,0 +1,7 @@
+isOle True
+['\x06DataSpaces', 'DataSpaceInfo', 'DRMEncryptedDataSpace']
+['\x06DataSpaces', 'DataSpaceMap']
+['\x06DataSpaces', 'TransformInfo', 'DRMEncryptedTransform', '\x06Primary']
+['\x06DataSpaces', 'TransformInfo', 'LabelInfo']
+['\x06DataSpaces', 'Version']
+['EncryptedPackage']
