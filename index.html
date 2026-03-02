@@ -329,6 +329,35 @@
                         <div id="workloadStats" class="regions-grid"></div>
                     </div>
 
+                    <!-- Footprint Analytics Section -->
+                    <div style="margin-bottom: 30px;">
+                        <h3 style="color:#0078d4; font-size:16px; margin-bottom:16px; font-weight:600">📍 Footprint Analytics</h3>
+                        
+                        <!-- Coverage per Region -->
+                        <div style="background:#f5f5f5; padding:16px; border-radius:6px; margin-bottom:20px;">
+                            <h4 style="color:#333; font-size:14px; font-weight:600; margin-bottom:12px;">Coverage per Region</h4>
+                            <div id="footprintCoverageByRegion" style="font-size:13px; line-height:1.6;"></div>
+                        </div>
+
+                        <!-- Deployed Regions per Namespace -->
+                        <div style="background:#f5f5f5; padding:16px; border-radius:6px; margin-bottom:20px;">
+                            <h4 style="color:#333; font-size:14px; font-weight:600; margin-bottom:12px;">Deployed Regions per Namespace</h4>
+                            <div id="footprintNamespaceDeployments" style="font-size:13px; line-height:1.6;"></div>
+                        </div>
+
+                        <!-- Deployment Status Breakdown -->
+                        <div style="background:#f5f5f5; padding:16px; border-radius:6px; margin-bottom:20px;">
+                            <h4 style="color:#333; font-size:14px; font-weight:600; margin-bottom:12px;">Deployment Status Breakdown</h4>
+                            <div id="footprintStatusBreakdown" style="font-size:13px; line-height:1.6;"></div>
+                        </div>
+
+                        <!-- Regions with Footprint vs Opportunity -->
+                        <div style="background:#f5f5f5; padding:16px; border-radius:6px;">
+                            <h4 style="color:#333; font-size:14px; font-weight:600; margin-bottom:12px;">Footprint vs Opportunity</h4>
+                            <div id="footprintVsOpportunity" style="font-size:13px; line-height:1.6;"></div>
+                        </div>
+                    </div>
+
                     <!-- Instructions Section -->
                     <div style="background:#e7f1f8; border-left:4px solid #0078d4; padding:20px; border-radius:6px;">
                         <h3 style="color:#0078d4; font-size:16px; margin-bottom:12px; font-weight:600">📋 How to Expand Your Workload Footprint</h3>
@@ -585,6 +614,8 @@
                 //});
                 statsContainer.appendChild(statCard);
             });
+            // Render footprint analytics after statistics
+            renderFootprintAnalytics();
         }
 
         function renderWorkloadCharts(name) {
@@ -625,6 +656,85 @@
             svcDiv.innerHTML = '<strong>Regions per service:</strong><br>' + Object.entries(services).map(([k,v])=>`${k}: ${v}`).join('<br>');
             geoDiv.innerHTML = '<strong>Regions by geography:</strong><br>' + Object.entries(geos).map(([k,v])=>`${k}: ${v}`).join('<br>');
             coreDiv.innerHTML = '<strong>Cores per namespace:</strong><br>' + Object.entries(coresByNs).map(([k,v])=>`${k}: ${v}`).join('<br>');
+        }
+
+        function renderFootprintAnalytics() {
+            // Collect all footprint data across workloads
+            const regionCoverage = {}; // region -> count of workloads
+            const namespaceDeployments = {}; // namespace -> count of regions
+            const statusBreakdown = { Major: 0, Smaller: 0, Opportunity: 0, 'Out-of-Scope': 0 };
+            const footprintRegions = new Set();
+            const opportunityRegions = new Set();
+            const allRegionNames = new Set();
+
+            Object.values(allWorkloads).forEach(entries => {
+                entries.forEach(entry => {
+                    const ns = entry.Namespace || 'Unknown';
+                    namespaceDeployments[ns] = (namespaceDeployments[ns] || 0) + 1;
+                    
+                    // Process region deployments
+                    if (entry.RegionDeployments) {
+                        Object.entries(entry.RegionDeployments).forEach(([region, status]) => {
+                            allRegionNames.add(region);
+                            regionCoverage[region] = (regionCoverage[region] || 0) + 1;
+                            
+                            if (status && statusBreakdown.hasOwnProperty(status)) {
+                                statusBreakdown[status]++;
+                            }
+                            
+                            if (status === 'Major' || status === 'Smaller') {
+                                footprintRegions.add(region);
+                            } else if (status === 'Opportunity') {
+                                opportunityRegions.add(region);
+                            }
+                        });
+                    }
+                });
+            });
+
+            // Render Coverage per Region
+            const coverageDiv = document.getElementById('footprintCoverageByRegion');
+            if (Object.keys(regionCoverage).length === 0) {
+                coverageDiv.innerHTML = '<em style="color:#999">No deployment data available.</em>';
+            } else {
+                const sorted = Object.entries(regionCoverage).sort((a, b) => b[1] - a[1]);
+                coverageDiv.innerHTML = sorted.map(([region, count]) => `<div>${region}: <strong>${count}</strong> workload(s)</div>`).join('');
+            }
+
+            // Render Namespace Deployments
+            const nsDiv = document.getElementById('footprintNamespaceDeployments');
+            if (Object.keys(namespaceDeployments).length === 0) {
+                nsDiv.innerHTML = '<em style="color:#999">No deployment data available.</em>';
+            } else {
+                const sorted = Object.entries(namespaceDeployments).sort((a, b) => b[1] - a[1]);
+                nsDiv.innerHTML = sorted.map(([ns, count]) => `<div>${ns}: <strong>${count}</strong> region(s)</div>`).join('');
+            }
+
+            // Render Status Breakdown
+            const statusDiv = document.getElementById('footprintStatusBreakdown');
+            const statusEntries = Object.entries(statusBreakdown).filter(([_, count]) => count > 0);
+            if (statusEntries.length === 0) {
+                statusDiv.innerHTML = '<em style="color:#999">No deployment status data available.</em>';
+            } else {
+                statusDiv.innerHTML = statusEntries.map(([status, count]) => {
+                    let color = '#333';
+                    if (status === 'Major') color = '#107c10';
+                    else if (status === 'Smaller') color = '#0078d4';
+                    else if (status === 'Opportunity') color = '#ff8c00';
+                    else if (status === 'Out-of-Scope') color = '#999';
+                    return `<div><span style="color:${color}; font-weight:600">${status}</span>: <strong>${count}</strong> deployment(s)</div>`;
+                }).join('');
+            }
+
+            // Render Footprint vs Opportunity
+            const fpvDiv = document.getElementById('footprintVsOpportunity');
+            const footprintCount = footprintRegions.size;
+            const opportunityCount = opportunityRegions.size;
+            fpvDiv.innerHTML = `
+                <div style="margin-bottom:10px;"><span style="color:#107c10; font-weight:600">Footprint Regions</span>: <strong>${footprintCount}</strong> region(s)</div>
+                <div style="margin-bottom:10px;"><span style="color:#ff8c00; font-weight:600">Opportunity Regions</span>: <strong>${opportunityCount}</strong> region(s)</div>
+                <div><span style="color:#666; font-weight:600">Total Identified Regions</span>: <strong>${allRegionNames.size}</strong></div>
+            `;
         }
     </script>
 </body>

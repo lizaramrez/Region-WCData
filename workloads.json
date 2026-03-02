@@ -6,7 +6,21 @@
       "Namespace": "opg-test-service1",
       "Geo": "APAC",
       "Cores": 27219,
-      "TotalRegions": 7
+      "TotalRegions": 7,
+      "RegionDeployments": {
+        "Malaysia South": "Major",
+        "West India": "Opportunity",
+        "Australia East": "Smaller",
+        "Central India": "Smaller",
+        "Indonesia Central": "Opportunity",
+        "Japan East": "Smaller",
+        "Japan West": "Smaller",
+        "Korea Central": "Smaller",
+        "Malaysia West": "Opportunity",
+        "Southeast Asia": "Opportunity",
+        "Taiwan North": "Opportunity",
+        "Hong Kong": "Out-of-Scope"
+      }
     },
     {
       "Workload": "OPG",
@@ -14,7 +28,24 @@
       "Namespace": "opg-test-service1",
       "Geo": "EMEA",
       "Cores": 35667,
-      "TotalRegions": 6
+      "TotalRegions": 6,
+      "RegionDeployments": {
+        "Qatar Central": "Opportunity",
+        "Israel Northwest": "Opportunity",
+        "France Central": "Major",
+        "Germany West Central": "Opportunity",
+        "Italy North": "Opportunity",
+        "North Europe": "Major",
+        "Norway East": "Opportunity",
+        "Poland Central": "Opportunity",
+        "South Africa North": "Smaller",
+        "Spain Central": "Opportunity",
+        "Sweden Central": "Smaller",
+        "Switzerland North": "Opportunity",
+        "UAE North": "Smaller",
+        "West Europe": "Major",
+        "UK West/South": "Out-of-Scope"
+      }
     },
     {
       "Workload": "OPG",
@@ -22,7 +53,20 @@
       "Namespace": "opg-test-service1",
       "Geo": "NOAM",
       "Cores": 40233,
-      "TotalRegions": 5
+      "TotalRegions": 5,
+      "RegionDeployments": {
+        "Brazil South": "Smaller",
+        "Canada Central": "Opportunity",
+        "Central US": "Smaller",
+        "East US": "Major",
+        "East US 2": "Major",
+        "Mexico Central": "Opportunity",
+        "North Central US": "Opportunity",
+        "South Central US": "Opportunity",
+        "West US": "Major",
+        "West US 2": "Opportunity",
+        "West US 3": "Opportunity"
+      }
     },
     {
       "Workload": "OPG",
@@ -30,7 +74,21 @@
       "Namespace": "opg-test-service2",
       "Geo": "APAC",
       "Cores": 12307,
-      "TotalRegions": 7
+      "TotalRegions": 7,
+      "RegionDeployments": {
+        "Malaysia South": "Major",
+        "West India": "Opportunity",
+        "Australia East": "Smaller",
+        "Central India": "Smaller",
+        "Indonesia Central": "Opportunity",
+        "Japan East": "Major",
+        "Japan West": "Smaller",
+        "Korea Central": "Smaller",
+        "Malaysia West": "Opportunity",
+        "Southeast Asia": "Opportunity",
+        "Taiwan North": "Opportunity",
+        "Hong Kong": "Out-of-Scope"
+      }
     },
     {
       "Workload": "OPG",
@@ -38,7 +96,24 @@
       "Namespace": "opg-test-service2",
       "Geo": "EMEA",
       "Cores": 13503,
-      "TotalRegions": 6
+      "TotalRegions": 6,
+      "RegionDeployments": {
+        "Qatar Central": "Opportunity",
+        "Israel Northwest": "Opportunity",
+        "France Central": "Major",
+        "Germany West Central": "Opportunity",
+        "Italy North": "Opportunity",
+        "North Europe": "Major",
+        "Norway East": "Opportunity",
+        "Poland Central": "Opportunity",
+        "South Africa North": "Smaller",
+        "Spain Central": "Opportunity",
+        "Sweden Central": "Smaller",
+        "Switzerland North": "Opportunity",
+        "UAE North": "Smaller",
+        "West Europe": "Major",
+        "UK West/South": "Out-of-Scope"
+      }
     },
     {
       "Workload": "OPG",
@@ -46,7 +121,20 @@
       "Namespace": "opg-test-service2",
       "Geo": "NOAM",
       "Cores": 15030,
-      "TotalRegions": 5
+      "TotalRegions": 5,
+      "RegionDeployments": {
+        "Brazil South": "Smaller",
+        "Canada Central": "Opportunity",
+        "Central US": "Smaller",
+        "East US": "Major",
+        "East US 2": "Major",
+        "Mexico Central": "Opportunity",
+        "North Central US": "Opportunity",
+        "South Central US": "Opportunity",
+        "West US": "Major",
+        "West US 2": "Opportunity",
+        "West US 3": "Opportunity"
+      }
     },
     {
       "Workload": "OPG",
@@ -54,7 +142,21 @@
       "Namespace": "opg-test-service3",
       "Geo": "APAC",
       "Cores": 24296,
-      "TotalRegions": 7
+      "TotalRegions": 7,
+      "RegionDeployments": {
+        "Malaysia South": "Smaller",
+        "West India": "Opportunity",
+        "Australia East": "Smaller",
+        "Central India": "Smaller",
+        "Indonesia Central": "Opportunity",
+        "Japan East": "Smaller",
+        "Japan West": "Smaller",
+        "Korea Central": "Smaller",
+        "Malaysia West": "Opportunity",
+        "Southeast Asia": "Opportunity",
+        "Taiwan North": "Opportunity",
+        "Hong Kong": "Out-of-Scope"
+      }
     },
     {
       "Workload": "OPG",
@@ -62,7 +164,24 @@
       "Namespace": "opg-test-service3",
       "Geo": "EMEA",
       "Cores": 41105,
-      "TotalRegions": 6
+      "TotalRegions": 6,
+      "RegionDeployments": {
+        "Qatar Central": "Opportunity",
+        "Israel Northwest": "Opportunity",
+        "France Central": "Major",
+        "Germany West Central": "Opportunity",
+        "Italy North": "Opportunity",
+        "North Europe": "Major",
+        "Norway East": "Opportunity",
+        "Poland Central": "Opportunity",
+        "South Africa North": "Smaller",
+        "Spain Central": "Opportunity",
+        "Sweden Central": "Smaller",
+        "Switzerland North": "Opportunity",
+        "UAE North": "Smaller",
+        "West Europe": "Major",
+        "UK West/South": "Out-of-Scope"
+      }
     },
     {
       "Workload": "OPG",
@@ -70,7 +189,20 @@
       "Namespace": "opg-test-service3",
       "Geo": "NOAM",
       "Cores": 44764,
-      "TotalRegions": 5
+      "TotalRegions": 5,
+      "RegionDeployments": {
+        "Brazil South": "Smaller",
+        "Canada Central": "Opportunity",
+        "Central US": "Major",
+        "East US": "Major",
+        "East US 2": "Major",
+        "Mexico Central": "Opportunity",
+        "North Central US": "Opportunity",
+        "South Central US": "Opportunity",
+        "West US": "Major",
+        "West US 2": "Opportunity",
+        "West US 3": "Opportunity"
+      }
     },
     {
       "Workload": "OPG",
@@ -78,7 +210,21 @@
       "Namespace": "opg-test-service4",
       "Geo": "APAC",
       "Cores": 40252,
-      "TotalRegions": 5
+      "TotalRegions": 5,
+      "RegionDeployments": {
+        "Malaysia South": "Smaller",
+        "West India": "Opportunity",
+        "Australia East": "Smaller",
+        "Central India": "Smaller",
+        "Indonesia Central": "Opportunity",
+        "Japan East": "Smaller",
+        "Japan West": "Smaller",
+        "Korea Central": "Smaller",
+        "Malaysia West": "Opportunity",
+        "Southeast Asia": "Opportunity",
+        "Taiwan North": "Opportunity",
+        "Hong Kong": "Out-of-Scope"
+      }
     },
     {
       "Workload": "OPG",
@@ -86,7 +232,24 @@
       "Namespace": "opg-test-service4",
       "Geo": "EMEA",
       "Cores": 84585,
-      "TotalRegions": 7
+      "TotalRegions": 7,
+      "RegionDeployments": {
+        "Qatar Central": "Opportunity",
+        "Israel Northwest": "Opportunity",
+        "France Central": "Major",
+        "Germany West Central": "Opportunity",
+        "Italy North": "Opportunity",
+        "North Europe": "Major",
+        "Norway East": "Opportunity",
+        "Poland Central": "Opportunity",
+        "South Africa North": "Smaller",
+        "Spain Central": "Opportunity",
+        "Sweden Central": "Smaller",
+        "Switzerland North": "Opportunity",
+        "UAE North": "Smaller",
+        "West Europe": "Major",
+        "UK West/South": "Out-of-Scope"
+      }
     },
     {
       "Workload": "OPG",
@@ -94,7 +257,20 @@
       "Namespace": "opg-test-service4",
       "Geo": "NOAM",
       "Cores": 101479,
-      "TotalRegions": 8
+      "TotalRegions": 8,
+      "RegionDeployments": {
+        "Brazil South": "Smaller",
+        "Canada Central": "Opportunity",
+        "Central US": "Opportunity",
+        "East US": "Major",
+        "East US 2": "Major",
+        "Mexico Central": "Opportunity",
+        "North Central US": "Opportunity",
+        "South Central US": "Major",
+        "West US": "Major",
+        "West US 2": "Opportunity",
+        "West US 3": "Opportunity"
+      }
     },
     {
       "Workload": "OPG",
@@ -102,7 +278,21 @@
       "Namespace": "opg-test-service5",
       "Geo": "APAC",
       "Cores": 4896,
-      "TotalRegions": 7
+      "TotalRegions": 7,
+      "RegionDeployments": {
+        "Malaysia South": "Major",
+        "West India": "Opportunity",
+        "Australia East": "Smaller",
+        "Central India": "Smaller",
+        "Indonesia Central": "Opportunity",
+        "Japan East": "Major",
+        "Japan West": "Smaller",
+        "Korea Central": "Opportunity",
+        "Malaysia West": "Opportunity",
+        "Southeast Asia": "Opportunity",
+        "Taiwan North": "Opportunity",
+        "Hong Kong": "Out-of-Scope"
+      }
     },
     {
       "Workload": "OPG",
@@ -110,7 +300,24 @@
       "Namespace": "opg-test-service5",
       "Geo": "EMEA",
       "Cores": 8156,
-      "TotalRegions": 5
+      "TotalRegions": 5,
+      "RegionDeployments": {
+        "Qatar Central": "Opportunity",
+        "Israel Northwest": "Opportunity",
+        "France Central": "Opportunity",
+        "Germany West Central": "Opportunity",
+        "Italy North": "Opportunity",
+        "North Europe": "Major",
+        "Norway East": "Opportunity",
+        "Poland Central": "Opportunity",
+        "South Africa North": "Smaller",
+        "Spain Central": "Opportunity",
+        "Sweden Central": "Major",
+        "Switzerland North": "Opportunity",
+        "UAE North": "Opportunity",
+        "West Europe": "Major",
+        "UK West/South": "Out-of-Scope"
+      }
     },
     {
       "Workload": "OPG",
@@ -118,7 +325,20 @@
       "Namespace": "opg-test-service5",
       "Geo": "NOAM",
       "Cores": 57805,
-      "TotalRegions": 5
+      "TotalRegions": 5,
+      "RegionDeployments": {
+        "Brazil South": "Smaller",
+        "Canada Central": "Opportunity",
+        "Central US": "Opportunity",
+        "East US": "Major",
+        "East US 2": "Opportunity",
+        "Mexico Central": "Opportunity",
+        "North Central US": "Opportunity",
+        "South Central US": "Major",
+        "West US": "Major",
+        "West US 2": "Opportunity",
+        "West US 3": "Opportunity"
+      }
     },
     {
       "Workload": "OPG",
@@ -126,7 +346,21 @@
       "Namespace": "opg-test-service6",
       "Geo": "APAC",
       "Cores": 8968,
-      "TotalRegions": 6
+      "TotalRegions": 6,
+      "RegionDeployments": {
+        "Malaysia South": "Major",
+        "West India": "Opportunity",
+        "Australia East": "Opportunity",
+        "Central India": "Opportunity",
+        "Indonesia Central": "Opportunity",
+        "Japan East": "Major",
+        "Japan West": "Major",
+        "Korea Central": "Opportunity",
+        "Malaysia West": "Opportunity",
+        "Southeast Asia": "Opportunity",
+        "Taiwan North": "Opportunity",
+        "Hong Kong": "Out-of-Scope"
+      }
     },
     {
       "Workload": "OPG",
@@ -134,7 +368,24 @@
       "Namespace": "opg-test-service6",
       "Geo": "EMEA",
       "Cores": 32102,
-      "TotalRegions": 7
+      "TotalRegions": 7,
+      "RegionDeployments": {
+        "Qatar Central": "Opportunity",
+        "Israel Northwest": "Opportunity",
+        "France Central": "Opportunity",
+        "Germany West Central": "Opportunity",
+        "Italy North": "Opportunity",
+        "North Europe": "Major",
+        "Norway East": "Opportunity",
+        "Poland Central": "Opportunity",
+        "South Africa North": "Opportunity",
+        "Spain Central": "Opportunity",
+        "Sweden Central": "Major",
+        "Switzerland North": "Opportunity",
+        "UAE North": "Opportunity",
+        "West Europe": "Major",
+        "UK West/South": "Out-of-Scope"
+      }
     },
     {
       "Workload": "OPG",
@@ -142,7 +393,20 @@
       "Namespace": "opg-test-service6",
       "Geo": "NOAM",
       "Cores": 69559,
-      "TotalRegions": 5
+      "TotalRegions": 5,
+      "RegionDeployments": {
+        "Brazil South": "Opportunity",
+        "Canada Central": "Opportunity",
+        "Central US": "Major",
+        "East US": "Smaller",
+        "East US 2": "Major",
+        "Mexico Central": "Opportunity",
+        "North Central US": "Opportunity",
+        "South Central US": "Smaller",
+        "West US": "Major",
+        "West US 2": "Opportunity",
+        "West US 3": "Opportunity"
+      }
     },
     {
       "Workload": "OPG",
@@ -150,7 +414,21 @@
       "Namespace": "opg-test-service7",
       "Geo": "APAC",
       "Cores": 1938,
-      "TotalRegions": 3
+      "TotalRegions": 3,
+      "RegionDeployments": {
+        "Malaysia South": "Major",
+        "West India": "Opportunity",
+        "Australia East": "Smaller",
+        "Central India": "Smaller",
+        "Indonesia Central": "Opportunity",
+        "Japan East": "Major",
+        "Japan West": "Opportunity",
+        "Korea Central": "Smaller",
+        "Malaysia West": "Opportunity",
+        "Southeast Asia": "Opportunity",
+        "Taiwan North": "Opportunity",
+        "Hong Kong": "Out-of-Scope"
+      }
     },
     {
       "Workload": "OPG",
@@ -158,7 +436,24 @@
       "Namespace": "opg-test-service7",
       "Geo": "EMEA",
       "Cores": 2381,
-      "TotalRegions": 3
+      "TotalRegions": 3,
+      "RegionDeployments": {
+        "Qatar Central": "Opportunity",
+        "Israel Northwest": "Opportunity",
+        "France Central": "Opportunity",
+        "Germany West Central": "Opportunity",
+        "Italy North": "Opportunity",
+        "North Europe": "Major",
+        "Norway East": "Opportunity",
+        "Poland Central": "Opportunity",
+        "South Africa North": "Smaller",
+        "Spain Central": "Opportunity",
+        "Sweden Central": "Smaller",
+        "Switzerland North": "Opportunity",
+        "UAE North": "Smaller",
+        "West Europe": "Major",
+        "UK West/South": "Out-of-Scope"
+      }
     },
     {
       "Workload": "OPG",
@@ -166,7 +461,20 @@
       "Namespace": "opg-test-service7",
       "Geo": "NOAM",
       "Cores": 2662,
-      "TotalRegions": 5
+      "TotalRegions": 5,
+      "RegionDeployments": {
+        "Brazil South": "Smaller",
+        "Canada Central": "Smaller",
+        "Central US": "Smaller",
+        "East US": "Major",
+        "East US 2": "Smaller",
+        "Mexico Central": "Opportunity",
+        "North Central US": "Opportunity",
+        "South Central US": "Major",
+        "West US": "Major",
+        "West US 2": "Opportunity",
+        "West US 3": "Opportunity"
+      }
     }
   ],
   "IC3": [
@@ -176,7 +484,21 @@
       "Namespace": "ic3-calling-callcontroller",
       "Geo": "APAC",
       "Cores": 27219,
-      "TotalRegions": 7
+      "TotalRegions": 7,
+      "RegionDeployments": {
+        "Malaysia South": "Major",
+        "West India": "Opportunity",
+        "Australia East": "Smaller",
+        "Central India": "Smaller",
+        "Indonesia Central": "Opportunity",
+        "Japan East": "Smaller",
+        "Japan West": "Smaller",
+        "Korea Central": "Smaller",
+        "Malaysia West": "Opportunity",
+        "Southeast Asia": "Opportunity",
+        "Taiwan North": "Opportunity",
+        "Hong Kong": "Out-of-Scope"
+      }
     },
     {
       "Workload": "IC3",
@@ -184,7 +506,24 @@
       "Namespace": "ic3-calling-callcontroller",
       "Geo": "EMEA",
       "Cores": 35667,
-      "TotalRegions": 6
+      "TotalRegions": 6,
+      "RegionDeployments": {
+        "Qatar Central": "Opportunity",
+        "Israel Northwest": "Opportunity",
+        "France Central": "Major",
+        "Germany West Central": "Opportunity",
+        "Italy North": "Opportunity",
+        "North Europe": "Major",
+        "Norway East": "Opportunity",
+        "Poland Central": "Opportunity",
+        "South Africa North": "Smaller",
+        "Spain Central": "Opportunity",
+        "Sweden Central": "Smaller",
+        "Switzerland North": "Opportunity",
+        "UAE North": "Smaller",
+        "West Europe": "Major",
+        "UK West/South": "Out-of-Scope"
+      }
     },
     {
       "Workload": "IC3",
@@ -192,7 +531,20 @@
       "Namespace": "ic3-calling-callcontroller",
       "Geo": "NOAM",
       "Cores": 40233,
-      "TotalRegions": 5
+      "TotalRegions": 5,
+      "RegionDeployments": {
+        "Brazil South": "Smaller",
+        "Canada Central": "Opportunity",
+        "Central US": "Smaller",
+        "East US": "Major",
+        "East US 2": "Major",
+        "Mexico Central": "Opportunity",
+        "North Central US": "Opportunity",
+        "South Central US": "Opportunity",
+        "West US": "Major",
+        "West US 2": "Opportunity",
+        "West US 3": "Opportunity"
+      }
     },
     {
       "Workload": "IC3",
@@ -200,7 +552,21 @@
       "Namespace": "ic3-calling-conversation",
       "Geo": "APAC",
       "Cores": 12307,
-      "TotalRegions": 7
+      "TotalRegions": 7,
+      "RegionDeployments": {
+        "Malaysia South": "Major",
+        "West India": "Opportunity",
+        "Australia East": "Smaller",
+        "Central India": "Smaller",
+        "Indonesia Central": "Opportunity",
+        "Japan East": "Major",
+        "Japan West": "Smaller",
+        "Korea Central": "Smaller",
+        "Malaysia West": "Opportunity",
+        "Southeast Asia": "Opportunity",
+        "Taiwan North": "Opportunity",
+        "Hong Kong": "Out-of-Scope"
+      }
     },
     {
       "Workload": "IC3",
@@ -208,7 +574,24 @@
       "Namespace": "ic3-calling-conversation",
       "Geo": "EMEA",
       "Cores": 13503,
-      "TotalRegions": 6
+      "TotalRegions": 6,
+      "RegionDeployments": {
+        "Qatar Central": "Opportunity",
+        "Israel Northwest": "Opportunity",
+        "France Central": "Major",
+        "Germany West Central": "Opportunity",
+        "Italy North": "Opportunity",
+        "North Europe": "Major",
+        "Norway East": "Opportunity",
+        "Poland Central": "Opportunity",
+        "South Africa North": "Smaller",
+        "Spain Central": "Opportunity",
+        "Sweden Central": "Smaller",
+        "Switzerland North": "Opportunity",
+        "UAE North": "Smaller",
+        "West Europe": "Major",
+        "UK West/South": "Out-of-Scope"
+      }
     },
     {
       "Workload": "IC3",
@@ -216,7 +599,20 @@
       "Namespace": "ic3-calling-conversation",
       "Geo": "NOAM",
       "Cores": 15030,
-      "TotalRegions": 5
+      "TotalRegions": 5,
+      "RegionDeployments": {
+        "Brazil South": "Smaller",
+        "Canada Central": "Opportunity",
+        "Central US": "Smaller",
+        "East US": "Major",
+        "East US 2": "Major",
+        "Mexico Central": "Opportunity",
+        "North Central US": "Opportunity",
+        "South Central US": "Opportunity",
+        "West US": "Major",
+        "West US 2": "Opportunity",
+        "West US 3": "Opportunity"
+      }
     },
     {
       "Workload": "IC3",
@@ -224,7 +620,21 @@
       "Namespace": "ic3-calling-enterpriseproxy",
       "Geo": "APAC",
       "Cores": 24296,
-      "TotalRegions": 7
+      "TotalRegions": 7,
+      "RegionDeployments": {
+        "Malaysia South": "Smaller",
+        "West India": "Opportunity",
+        "Australia East": "Smaller",
+        "Central India": "Smaller",
+        "Indonesia Central": "Opportunity",
+        "Japan East": "Smaller",
+        "Japan West": "Smaller",
+        "Korea Central": "Smaller",
+        "Malaysia West": "Opportunity",
+        "Southeast Asia": "Opportunity",
+        "Taiwan North": "Opportunity",
+        "Hong Kong": "Out-of-Scope"
+      }
     },
     {
       "Workload": "IC3",
@@ -232,7 +642,24 @@
       "Namespace": "ic3-calling-enterpriseproxy",
       "Geo": "EMEA",
       "Cores": 41105,
-      "TotalRegions": 6
+      "TotalRegions": 6,
+      "RegionDeployments": {
+        "Qatar Central": "Opportunity",
+        "Israel Northwest": "Opportunity",
+        "France Central": "Major",
+        "Germany West Central": "Opportunity",
+        "Italy North": "Opportunity",
+        "North Europe": "Major",
+        "Norway East": "Opportunity",
+        "Poland Central": "Opportunity",
+        "South Africa North": "Smaller",
+        "Spain Central": "Opportunity",
+        "Sweden Central": "Smaller",
+        "Switzerland North": "Opportunity",
+        "UAE North": "Smaller",
+        "West Europe": "Major",
+        "UK West/South": "Out-of-Scope"
+      }
     },
     {
       "Workload": "IC3",
@@ -240,7 +667,20 @@
       "Namespace": "ic3-calling-enterpriseproxy",
       "Geo": "NOAM",
       "Cores": 44764,
-      "TotalRegions": 5
+      "TotalRegions": 5,
+      "RegionDeployments": {
+        "Brazil South": "Smaller",
+        "Canada Central": "Opportunity",
+        "Central US": "Major",
+        "East US": "Major",
+        "East US 2": "Major",
+        "Mexico Central": "Opportunity",
+        "North Central US": "Opportunity",
+        "South Central US": "Opportunity",
+        "West US": "Major",
+        "West US 2": "Opportunity",
+        "West US 3": "Opportunity"
+      }
     },
     {
       "Workload": "IC3",
@@ -248,7 +688,21 @@
       "Namespace": "ic3-media-mc",
       "Geo": "APAC",
       "Cores": 40252,
-      "TotalRegions": 5
+      "TotalRegions": 5,
+      "RegionDeployments": {
+        "Malaysia South": "Smaller",
+        "West India": "Opportunity",
+        "Australia East": "Smaller",
+        "Central India": "Smaller",
+        "Indonesia Central": "Opportunity",
+        "Japan East": "Smaller",
+        "Japan West": "Smaller",
+        "Korea Central": "Smaller",
+        "Malaysia West": "Opportunity",
+        "Southeast Asia": "Opportunity",
+        "Taiwan North": "Opportunity",
+        "Hong Kong": "Out-of-Scope"
+      }
     },
     {
       "Workload": "IC3",
@@ -256,7 +710,24 @@
       "Namespace": "ic3-media-mc",
       "Geo": "EMEA",
       "Cores": 84585,
-      "TotalRegions": 7
+      "TotalRegions": 7,
+      "RegionDeployments": {
+        "Qatar Central": "Opportunity",
+        "Israel Northwest": "Opportunity",
+        "France Central": "Major",
+        "Germany West Central": "Opportunity",
+        "Italy North": "Opportunity",
+        "North Europe": "Major",
+        "Norway East": "Opportunity",
+        "Poland Central": "Opportunity",
+        "South Africa North": "Smaller",
+        "Spain Central": "Opportunity",
+        "Sweden Central": "Smaller",
+        "Switzerland North": "Opportunity",
+        "UAE North": "Smaller",
+        "West Europe": "Major",
+        "UK West/South": "Out-of-Scope"
+      }
     },
     {
       "Workload": "IC3",
@@ -264,7 +735,20 @@
       "Namespace": "ic3-media-mc",
       "Geo": "NOAM",
       "Cores": 101479,
-      "TotalRegions": 8
+      "TotalRegions": 8,
+      "RegionDeployments": {
+        "Brazil South": "Smaller",
+        "Canada Central": "Opportunity",
+        "Central US": "Opportunity",
+        "East US": "Major",
+        "East US 2": "Major",
+        "Mexico Central": "Opportunity",
+        "North Central US": "Opportunity",
+        "South Central US": "Major",
+        "West US": "Major",
+        "West US 2": "Opportunity",
+        "West US 3": "Opportunity"
+      }
     },
     {
       "Workload": "IC3",
@@ -272,7 +756,21 @@
       "Namespace": "ic3-messaging-mfe",
       "Geo": "APAC",
       "Cores": 4896,
-      "TotalRegions": 7
+      "TotalRegions": 7,
+      "RegionDeployments": {
+        "Malaysia South": "Major",
+        "West India": "Opportunity",
+        "Australia East": "Smaller",
+        "Central India": "Smaller",
+        "Indonesia Central": "Opportunity",
+        "Japan East": "Major",
+        "Japan West": "Smaller",
+        "Korea Central": "Opportunity",
+        "Malaysia West": "Opportunity",
+        "Southeast Asia": "Opportunity",
+        "Taiwan North": "Opportunity",
+        "Hong Kong": "Out-of-Scope"
+      }
     },
     {
       "Workload": "IC3",
@@ -280,7 +778,24 @@
       "Namespace": "ic3-messaging-mfe",
       "Geo": "EMEA",
       "Cores": 8156,
-      "TotalRegions": 5
+      "TotalRegions": 5,
+      "RegionDeployments": {
+        "Qatar Central": "Opportunity",
+        "Israel Northwest": "Opportunity",
+        "France Central": "Opportunity",
+        "Germany West Central": "Opportunity",
+        "Italy North": "Opportunity",
+        "North Europe": "Major",
+        "Norway East": "Opportunity",
+        "Poland Central": "Opportunity",
+        "South Africa North": "Smaller",
+        "Spain Central": "Opportunity",
+        "Sweden Central": "Major",
+        "Switzerland North": "Opportunity",
+        "UAE North": "Opportunity",
+        "West Europe": "Major",
+        "UK West/South": "Out-of-Scope"
+      }
     },
     {
       "Workload": "IC3",
@@ -288,7 +803,20 @@
       "Namespace": "ic3-messaging-mfe",
       "Geo": "NOAM",
       "Cores": 57805,
-      "TotalRegions": 5
+      "TotalRegions": 5,
+      "RegionDeployments": {
+        "Brazil South": "Smaller",
+        "Canada Central": "Opportunity",
+        "Central US": "Opportunity",
+        "East US": "Major",
+        "East US 2": "Opportunity",
+        "Mexico Central": "Opportunity",
+        "North Central US": "Opportunity",
+        "South Central US": "Major",
+        "West US": "Major",
+        "West US 2": "Opportunity",
+        "West US 3": "Opportunity"
+      }
     },
     {
       "Workload": "IC3",
@@ -296,7 +824,21 @@
       "Namespace": "ic3-messaging-mfeconsumer",
       "Geo": "APAC",
       "Cores": 8968,
-      "TotalRegions": 6
+      "TotalRegions": 6,
+      "RegionDeployments": {
+        "Malaysia South": "Major",
+        "West India": "Opportunity",
+        "Australia East": "Opportunity",
+        "Central India": "Opportunity",
+        "Indonesia Central": "Opportunity",
+        "Japan East": "Major",
+        "Japan West": "Major",
+        "Korea Central": "Opportunity",
+        "Malaysia West": "Opportunity",
+        "Southeast Asia": "Opportunity",
+        "Taiwan North": "Opportunity",
+        "Hong Kong": "Out-of-Scope"
+      }
     },
     {
       "Workload": "IC3",
@@ -304,7 +846,24 @@
       "Namespace": "ic3-messaging-mfeconsumer",
       "Geo": "EMEA",
       "Cores": 32102,
-      "TotalRegions": 7
+      "TotalRegions": 7,
+      "RegionDeployments": {
+        "Qatar Central": "Opportunity",
+        "Israel Northwest": "Opportunity",
+        "France Central": "Opportunity",
+        "Germany West Central": "Opportunity",
+        "Italy North": "Opportunity",
+        "North Europe": "Major",
+        "Norway East": "Opportunity",
+        "Poland Central": "Opportunity",
+        "South Africa North": "Opportunity",
+        "Spain Central": "Opportunity",
+        "Sweden Central": "Major",
+        "Switzerland North": "Opportunity",
+        "UAE North": "Opportunity",
+        "West Europe": "Major",
+        "UK West/South": "Out-of-Scope"
+      }
     },
     {
       "Workload": "IC3",
@@ -312,7 +871,20 @@
       "Namespace": "ic3-messaging-mfeconsumer",
       "Geo": "NOAM",
       "Cores": 69559,
-      "TotalRegions": 5
+      "TotalRegions": 5,
+      "RegionDeployments": {
+        "Brazil South": "Opportunity",
+        "Canada Central": "Opportunity",
+        "Central US": "Major",
+        "East US": "Smaller",
+        "East US 2": "Major",
+        "Mexico Central": "Opportunity",
+        "North Central US": "Opportunity",
+        "South Central US": "Smaller",
+        "West US": "Major",
+        "West US 2": "Opportunity",
+        "West US 3": "Opportunity"
+      }
     },
     {
       "Workload": "IC3",
@@ -320,7 +892,21 @@
       "Namespace": "ic3-messaging-threads",
       "Geo": "APAC",
       "Cores": 1938,
-      "TotalRegions": 3
+      "TotalRegions": 3,
+      "RegionDeployments": {
+        "Malaysia South": "Major",
+        "West India": "Opportunity",
+        "Australia East": "Smaller",
+        "Central India": "Smaller",
+        "Indonesia Central": "Opportunity",
+        "Japan East": "Major",
+        "Japan West": "Opportunity",
+        "Korea Central": "Smaller",
+        "Malaysia West": "Opportunity",
+        "Southeast Asia": "Opportunity",
+        "Taiwan North": "Opportunity",
+        "Hong Kong": "Out-of-Scope"
+      }
     },
     {
       "Workload": "IC3",
@@ -328,7 +914,24 @@
       "Namespace": "ic3-messaging-threads",
       "Geo": "EMEA",
       "Cores": 2381,
-      "TotalRegions": 3
+      "TotalRegions": 3,
+      "RegionDeployments": {
+        "Qatar Central": "Opportunity",
+        "Israel Northwest": "Opportunity",
+        "France Central": "Opportunity",
+        "Germany West Central": "Opportunity",
+        "Italy North": "Opportunity",
+        "North Europe": "Major",
+        "Norway East": "Opportunity",
+        "Poland Central": "Opportunity",
+        "South Africa North": "Smaller",
+        "Spain Central": "Opportunity",
+        "Sweden Central": "Smaller",
+        "Switzerland North": "Opportunity",
+        "UAE North": "Smaller",
+        "West Europe": "Major",
+        "UK West/South": "Out-of-Scope"
+      }
     },
     {
       "Workload": "IC3",
@@ -336,7 +939,20 @@
       "Namespace": "ic3-messaging-threads",
       "Geo": "NOAM",
       "Cores": 2662,
-      "TotalRegions": 5
+      "TotalRegions": 5,
+      "RegionDeployments": {
+        "Brazil South": "Smaller",
+        "Canada Central": "Smaller",
+        "Central US": "Smaller",
+        "East US": "Major",
+        "East US 2": "Smaller",
+        "Mexico Central": "Opportunity",
+        "North Central US": "Opportunity",
+        "South Central US": "Major",
+        "West US": "Major",
+        "West US 2": "Opportunity",
+        "West US 3": "Opportunity"
+      }
     }
   ]
 }

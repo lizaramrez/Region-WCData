@@ -73,7 +73,7 @@ print(f"NOAM regions: {len(geo_regions['NOAM'])}")
 # === Workloads: create workloads.json from OPG and IC3 region data CSVs ===
 workloads = {}
 
-def add_workload_entry(workload_key, service_name, namespace, geo, cores_str, total_regions):
+def add_workload_entry(workload_key, service_name, namespace, geo, cores_str, total_regions, row_data=None):
     """Add a workload entry to the workloads dictionary."""
     # parse cores string (may contain commas)
     cores = 0
@@ -88,8 +88,20 @@ def add_workload_entry(workload_key, service_name, namespace, geo, cores_str, to
         'Namespace': namespace,
         'Geo': geo,
         'Cores': cores,
-        'TotalRegions': int(total_regions) if total_regions else 0
+        'TotalRegions': int(total_regions) if total_regions else 0,
+        'RegionDeployments': {}  # Will hold region -> deployment status
     }
+    
+    # Extract region deployment data if available
+    if row_data is not None:
+        # Region columns start from index 8 onwards
+        region_cols = row_data.index[8:]
+        for region_col in region_cols:
+            status = row_data.get(region_col)
+            if pd.notna(status) and status.strip():
+                region_name = str(region_col).split('.')[0]  # Handle duplicates like APAC, APAC.1
+                entry['RegionDeployments'][region_name] = str(status).strip()
+    
     workloads.setdefault(workload_key, []).append(entry)
 
 # Load OPGRegionData.csv (skip first row with geo headers, use row 2 as header)
@@ -102,7 +114,7 @@ try:
         cores = row.get('# of Cores', 0)
         total_regions = row.get('# of Total Regions', 0)
         if service_name and namespace and service_name != 'Service Name':
-            add_workload_entry('OPG', service_name, namespace, geo, cores, total_regions)
+            add_workload_entry('OPG', service_name, namespace, geo, cores, total_regions, row)
     print(f'Loaded {len(opg_df)} rows from OPGRegionData.csv')
 except FileNotFoundError:
     print('OPGRegionData.csv not found')
@@ -119,7 +131,7 @@ try:
         cores = row.get('# of Cores', 0)
         total_regions = row.get('# of Total Regions', 0)
         if service_name and namespace and service_name != 'Service Name':
-            add_workload_entry('IC3', service_name, namespace, geo, cores, total_regions)
+            add_workload_entry('IC3', service_name, namespace, geo, cores, total_regions, row)
     print(f'Loaded {len(ic3_df)} rows from IC3RegionData.csv')
 except FileNotFoundError:
     print('IC3RegionData.csv not found')
