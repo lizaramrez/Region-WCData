@@ -297,7 +297,7 @@
                     </div>
                 </div>
 
-                <!-- Workloads list -->
+                <!-- Workloads list with expandable subitems -->
                 <div id="workloadNav" style="display:none;">
                     <div class="section-title">Workloads</div>
                     <div id="workloadList"></div>
@@ -400,15 +400,10 @@
                         <div id="workloadDetailSub" style="color:#666; font-size:13px">Currently deployed regions</div>
                     </div>
 
-                    <!-- sub-tabs inside detail -->
-                    <div class="tabs-container" style="margin-bottom:16px;">
-                        <button id="detailTabRegions" class="tab-btn active" style="padding:6px 8px; font-size:13px;">Regions</button>
-                        <button id="detailTabBreakdown" class="tab-btn inactive" style="padding:6px 8px; font-size:13px;">Footprint Breakdown</button>
-                        <button id="detailTabFlex" class="tab-btn inactive" style="padding:6px 8px; font-size:13px;">Edit Flexibility</button>
-                    </div>
+
 
                     <!-- Regions content -->
-                    <div id="detailRegionsView">
+                    <div id="regionsView">
                         <div id="workloadRegionsContainer" class="regions-grid"></div>
                         <!-- Charts area -->
                         <div id="workloadCharts" style="margin-top:30px;">
@@ -420,12 +415,12 @@
                     </div>
 
                     <!-- Breakdown per service -->
-                    <div id="detailBreakdownView" style="display:none;">
+                    <div id="breakdownView" style="display:none;">
                         <div id="serviceBreakdownCharts"></div>
                     </div>
 
                     <!-- Flexibility editor -->
-                    <div id="detailFlexView" style="display:none;">
+                    <div id="flexView" style="display:none;">
                         <div id="flexEditor" style="font-size:13px;color:#333;"></div>
                     </div>
                 </div>
@@ -550,11 +545,41 @@
             }
             let firstBtn = null;
             keys.forEach(wl => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'workload-wrapper';
                 const btn = document.createElement('div');
                 btn.className = 'workload-item';
                 btn.textContent = wl;
                 btn.addEventListener('click', () => selectWorkload(wl, btn));
-                wlContainer.appendChild(btn);
+                wrapper.appendChild(btn);
+                // subnav area
+                const sub = document.createElement('div');
+                sub.className = 'subnav';
+                sub.style.display = 'none';
+                sub.style.marginLeft = '12px';
+                sub.innerHTML = `
+                    <div class="subitem" data-action="breakdown">Footprint breakdown</div>
+                    <div class="subitem" data-action="flex">Edit Region Flexibility</div>
+                `;
+                // attach subitem handlers
+                sub.querySelectorAll('.subitem').forEach(si=>{
+                    si.style.cursor = 'pointer';
+                    si.addEventListener('click', e=>{
+                        e.stopPropagation();
+                        const action = si.getAttribute('data-action');
+                        // mark active
+                        sub.querySelectorAll('.subitem').forEach(x=>x.style.fontWeight='400');
+                        si.style.fontWeight='600';
+                        showDetailSection(action);
+                    });
+                });
+                // when workload first clicked, set breakdown bold
+                sub.querySelectorAll('.subitem').forEach(x=>x.style.fontWeight='400');
+                const first = sub.querySelector('.subitem[data-action="breakdown"]');
+                if (first) first.style.fontWeight='600';
+
+                wrapper.appendChild(sub);
+                wlContainer.appendChild(wrapper);
                 if (wl === 'IC3') firstBtn = btn;
                 if (!firstBtn) firstBtn = btn;
             });
@@ -573,21 +598,25 @@
             document.getElementById('selectedWorkloadName').textContent = `${name} - Deployment Details`;
             document.getElementById('workloadDetailSub').textContent = `Currently deployed regions for ${name}`;
             // reset detail sub-tabs to Regions
-            document.getElementById('detailTabRegions').classList.add('active');
-            document.getElementById('detailTabRegions').classList.remove('inactive');
-            document.getElementById('detailTabBreakdown').classList.remove('active');
-            document.getElementById('detailTabBreakdown').classList.add('inactive');
-            document.getElementById('detailTabFlex').classList.remove('active');
-            document.getElementById('detailTabFlex').classList.add('inactive');
-            document.getElementById('detailRegionsView').style.display = 'block';
-            document.getElementById('detailBreakdownView').style.display = 'none';
-            document.getElementById('detailFlexView').style.display = 'none';
+
+            document.getElementById('regionsView').style.display = 'block';
+            document.getElementById('breakdownView').style.display = 'none';
+            document.getElementById('flexView').style.display = 'none';
             renderWorkloadRegions(name);
         }
 
         function renderWorkloadRegions(name) {
             currentWorkloadName = name;
+            showDetailSection('regions');
             const container = document.getElementById('workloadRegionsContainer');
+            // collapse other workload subnavs and expand this one
+            document.querySelectorAll('#workloadList .subnav').forEach(el=>el.style.display='none');
+            const mySub = btnEl.nextElementSibling;
+            if (mySub && mySub.classList.contains('subnav')) {
+                mySub.style.display = 'block';
+            }
+            // default to breakdown view when selecting workload
+            showDetailSection('breakdown');
             container.innerHTML = '';
             const entries = allWorkloads[name] || [];
             if (entries.length === 0) {
@@ -622,38 +651,7 @@
             renderFootprintAnalytics();
         }
 
-        // wire up detail sub-tabs
-        document.addEventListener('DOMContentLoaded', () => {
-            const tabR = document.getElementById('detailTabRegions');
-            const tabB = document.getElementById('detailTabBreakdown');
-            const tabF = document.getElementById('detailTabFlex');
-            tabR.addEventListener('click', () => {
-                tabR.classList.add('active'); tabR.classList.remove('inactive');
-                tabB.classList.remove('active'); tabB.classList.add('inactive');
-                tabF.classList.remove('active'); tabF.classList.add('inactive');
-                document.getElementById('detailRegionsView').style.display = 'block';
-                document.getElementById('detailBreakdownView').style.display = 'none';
-                document.getElementById('detailFlexView').style.display = 'none';
-            });
-            tabB.addEventListener('click', () => {
-                tabB.classList.add('active'); tabB.classList.remove('inactive');
-                tabR.classList.remove('active'); tabR.classList.add('inactive');
-                tabF.classList.remove('active'); tabF.classList.add('inactive');
-                document.getElementById('detailRegionsView').style.display = 'none';
-                document.getElementById('detailBreakdownView').style.display = 'block';
-                document.getElementById('detailFlexView').style.display = 'none';
-                renderServiceBreakdown(currentWorkloadName);
-            });
-            tabF.addEventListener('click', () => {
-                tabF.classList.add('active'); tabF.classList.remove('inactive');
-                tabR.classList.remove('active'); tabR.classList.add('inactive');
-                tabB.classList.remove('active'); tabB.classList.add('inactive');
-                document.getElementById('detailRegionsView').style.display = 'none';
-                document.getElementById('detailBreakdownView').style.display = 'none';
-                document.getElementById('detailFlexView').style.display = 'block';
-                renderFlexEditor(currentWorkloadName);
-            });
-        });
+
 
         let currentWorkloadName = null;
 
@@ -862,6 +860,27 @@
             if (s==='Opportunity') return '#ff8c00';
             if (s==='Out-of-Scope') return '#999';
             return '#ccc';
+        }
+
+        function showDetailSection(section) {
+            // hide all views
+            ['regionsView','breakdownView','flexView'].forEach(id=>{
+                const el = document.getElementById(id);
+                if (el) el.style.display = (id.indexOf(section) !== -1) ? 'block' : 'none';
+            });
+            // update active link styling
+            ['Regions','Breakdown','Flex'].forEach(s=>{
+                const a = document.getElementById('subnav'+s);
+                if (a) {
+                    if (s.toLowerCase().startsWith(section)) {
+                        a.style.fontWeight = '600';
+                    } else {
+                        a.style.fontWeight = '400';
+                    }
+                }
+            });
+            if (section==='breakdown') renderServiceBreakdown(currentWorkloadName);
+            if (section==='flex') renderFlexEditor(currentWorkloadName);
         }
 
         function renderServiceBreakdown(name) {
