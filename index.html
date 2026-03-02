@@ -257,6 +257,21 @@
             background: #555;
         }
     </style>
+        <style>
+            .legend-dot {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 20px;
+                height: 20px;
+                min-width: 20px;
+                min-height: 20px;
+                border-radius: 50%;
+                margin-right: 10px;
+                box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+                vertical-align: middle;
+            }
+        </style>
     <!-- Chart.js for graphical summaries (local) -->
     <script src="chart.js"></script>
 </head>
@@ -422,11 +437,38 @@
                             <h4 style="color:#0078d4; font-size:15px; font-weight:600; margin-bottom:10px;">Region Names Matrix</h4>
                             <div style="margin-bottom:18px;padding:16px 22px;background:linear-gradient(90deg,#f7fafd 60%,#f0f4f8 100%);border:1px solid #e0e0e0;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.03);max-width:700px;">
                                 <div style="font-size:15px;font-weight:700;letter-spacing:0.5px;margin-bottom:8px;color:#333;">Legend</div>
-                                <div style="display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-start;">
-                                    <div style="display:flex;align-items:center;gap:7px;min-width:180px;"><span style="display:inline-block;width:18px;height:18px;background:#107c10;border-radius:50%;margin-right:4px;"></span><span style="font-weight:600;color:#222;">Major</span><span style="color:#555;font-weight:400;">Region has ≥20% of its Geo's total cores for that Namespace</span></div>
-                                    <div style="display:flex;align-items:center;gap:7px;min-width:180px;"><span style="display:inline-block;width:18px;height:18px;background:#0078d4;border-radius:50%;margin-right:4px;"></span><span style="font-weight:600;color:#222;">Smaller</span><span style="color:#555;font-weight:400;">Region has &lt;20% of its Geo's total cores, BUT has at least one other region in the same Namespace qualifies as Major (in the event that a Namespace is spread across more than 5 regions in a geo)</span></div>
-                                    <div style="display:flex;align-items:center;gap:7px;min-width:180px;"><span style="display:inline-block;width:18px;height:18px;background:#bfa600;border-radius:50%;margin-right:4px;"></span><span style="font-weight:600;color:#222;">Opportunity</span><span style="color:#555;font-weight:400;">Namespace could <u>add</u> the region to their footprint, BUT not necessarily as a replacement for another existing region</span></div>
-                                    <div style="display:flex;align-items:center;gap:7px;min-width:180px;"><span style="display:inline-block;width:18px;height:18px;background:#999;border-radius:50%;margin-right:4px;"></span><span style="font-weight:600;color:#222;">Out-of-Scope</span><span style="color:#555;font-weight:400;">Unable to deploy any capacity to the region for compliance reasons</span></div>
+                                <div style="display:flex;flex-direction:column;gap:10px 0;align-items:flex-start;">
+                                    <div style="display:flex;align-items:center;gap:12px;min-width:220px;">
+                                        <span class="legend-dot" style="background:#107c10;"></span>
+                                        <span style="font-weight:600;color:#222;min-width:70px;">Major</span>
+                                        <span style="color:#555;font-weight:400;">Region has ≥20% of its Geo's total cores for that Namespace</span>
+                                    </div>
+                                    <div style="display:flex;align-items:center;gap:12px;min-width:220px;">
+                                        <span class="legend-dot" style="background:#0078d4;"></span>
+                                        <span style="font-weight:600;color:#222;min-width:70px;">Smaller</span>
+                                        <span style="color:#555;font-weight:400;">Region has &lt;20% of its Geo's total cores, BUT has at least one other region in the same Namespace qualifies as Major (in the event that a Namespace is spread across more than 5 regions in a geo)</span>
+                                    </div>
+                                    <div style="display:flex;align-items:center;gap:12px;min-width:220px;">
+                                        <span class="legend-dot" style="background:#bfa600;"></span>
+                                        <span style="font-weight:600;color:#222;min-width:70px;">Opportunity</span>
+                                        <span style="color:#555;font-weight:400;">Namespace could <u>add</u> the region to their footprint, BUT not necessarily as a replacement for another existing region</span>
+                                    </div>
+                                    <div style="display:flex;align-items:center;gap:12px;min-width:220px;">
+                                        <span class="legend-dot" style="background:#999;"></span>
+                                        <span style="font-weight:600;color:#222;min-width:70px;">Out-of-Scope</span>
+                                        <span style="color:#555;font-weight:400;">Unable to deploy any capacity to the region for compliance reasons</span>
+                                    </div>
+                                        <style>
+                                            .legend-dot {
+                                                display: inline-block;
+                                                width: 20px;
+                                                height: 20px;
+                                                border-radius: 50%;
+                                                margin-right: 6px;
+                                                vertical-align: middle;
+                                                box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+                                            }
+                                        </style>
                                 </div>
                             </div>
                             <div id="namespaceRegionMatrix"></div>
