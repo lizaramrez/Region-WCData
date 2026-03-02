@@ -257,6 +257,11 @@
             background: #555;
         }
     </style>
+    <!-- Chart.js for graphical summaries -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- plugins for treemap and geo/bubble map -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-treemap"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-geo"></script>
 </head>
 <body>
     <div class="container">
@@ -323,10 +328,27 @@
                         <div id="workloadSub" style="color:#666; font-size:13px">Overview of current deployment footprint</div>
                     </div>
 
-                    <!-- Statistics Section -->
+                    <!-- Workload Summary Chart -->
                     <div style="margin-bottom: 30px;">
-                        <h3 style="color:#0078d4; font-size:16px; margin-bottom:16px; font-weight:600">Deployment Statistics</h3>
-                        <div id="workloadStats" class="regions-grid"></div>
+                        <h3 style="color:#0078d4; font-size:16px; margin-bottom:16px; font-weight:600">Workloads Overview</h3>
+                        <canvas id="statsChart" style="max-width:100%;height:200px"></canvas>
+                    </div>
+                    <!-- additional summary charts -->
+                    <div style="margin-bottom:30px;">
+                        <h3 style="color:#0078d4; font-size:16px; margin-bottom:16px; font-weight:600">Geo & Status Breakdown</h3>
+                        <canvas id="geoStackChart" style="max-width:100%;height:250px"></canvas>
+                    </div>
+                    <div style="margin-bottom:30px;">
+                        <h3 style="color:#0078d4; font-size:16px; margin-bottom:16px; font-weight:600">Deployment Status Distribution</h3>
+                        <canvas id="statusPieChart" style="max-width:100%;height:200px"></canvas>
+                    </div>
+                    <div style="margin-bottom:30px;">
+                        <h3 style="color:#0078d4; font-size:16px; margin-bottom:16px; font-weight:600">Namespace Cores Treemap</h3>
+                        <canvas id="treemapChart" style="max-width:100%;height:300px"></canvas>
+                    </div>
+                    <div style="margin-bottom:30px;">
+                        <h3 style="color:#0078d4; font-size:16px; margin-bottom:16px; font-weight:600">World Map of Major Footprints</h3>
+                        <canvas id="worldMapChart" style="max-width:100%;height:300px"></canvas>
                     </div>
 
                     <!-- Footprint Analytics Section -->
@@ -560,62 +582,58 @@
         }
 
         function renderWorkloadStatistics() {
-            const statsContainer = document.getElementById('workloadStats');
-            statsContainer.innerHTML = '';
-            const keys = Object.keys(allWorkloads || {});
-            
-            if (keys.length === 0) {
-                statsContainer.innerHTML = `<div style="grid-column:1/-1"><div class="empty-state"><div class="empty-state-icon">📊</div><p>No workload data available</p></div></div>`;
+            console.log('renderWorkloadStatistics called');
+            // only show charts, no cards
+            renderStatsChart();
+            renderGeoStackChart();
+            renderStatusPieChart();
+            renderTreemapChart();
+            renderWorldMapChart();
+            renderFootprintAnalytics();
+        }
+
+        // build the summary chart that appears on the main workloads dashboard
+        function renderStatsChart() {
+            console.log('renderStatsChart called');
+            const counts = {};
+            Object.entries(allWorkloads).forEach(([wl, entries]) => {
+                counts[wl] = (entries && entries.length) || 0;
+            });
+            const labels = Object.keys(counts);
+            const data = labels.map(l => counts[l]);
+
+            const canvas = document.getElementById('statsChart');
+            if (!canvas) {
+                console.warn('statsChart canvas not found');
                 return;
             }
-
-            keys.forEach(wl => {
-                const entries = allWorkloads[wl] || [];
-                const deployedCount = entries.length;
-                // determine core column dynamically
-                let coreKey = null;
-                if(entries.length){
-                    Object.keys(entries[0]).forEach(k=>{ if(!coreKey && k.toLowerCase().includes('core')) coreKey = k; });
+            const ctx = canvas.getContext('2d');
+            if (window.statsChartInstance) {
+                window.statsChartInstance.destroy();
+            }
+            // set explicit pixel dimensions so Chart.js won't continually enlarge the canvas
+            canvas.width = canvas.offsetWidth;
+            canvas.height = 200;
+            window.statsChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Regions per workload',
+                        data: data,
+                        backgroundColor: 'rgba(0,120,212,0.6)'
+                    }]
+                },
+                options: {
+                    // turn off responsive resizing to avoid the "growing&#34; bug
+                    responsive: false,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { title: { display: true, text: 'Workload' } },
+                        y: { title: { display: true, text: 'Number of Regions' }, beginAtZero: true }
+                    }
                 }
-                let totalCores = 0;
-                entries.forEach(e=>{ totalCores += parseInt(coreKey ? e[coreKey] : (e.cores||0)) || 0; });
-                const statCard = document.createElement('div');
-                statCard.className = 'region-card';
-                statCard.style.cursor = 'default';
-                statCard.innerHTML = `
-                    <div class="region-name">${wl}</div>
-                    <div class="region-info">
-                        <div class="info-row">
-                            <span class="info-label">Deployed Regions:</span>
-                            <span class="info-value" style="font-size:18px; font-weight:600; color:#0078d4">${deployedCount}</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Total Cores:</span>
-                            <span class="info-value" style="font-size:18px; font-weight:600; color:#0078d4">${totalCores}</span>
-                        </div>`;
-                if (deployedCount > 0) {
-                    const geos = new Set();
-                    entries.forEach(e => {
-                        Object.entries(allRegionsData).forEach(([geo, regions]) => {
-                            if (regions.some(r => r.name === e.region)) geos.add(geo);
-                        });
-                    });
-                    statCard.innerHTML += `
-                        <div class="info-row">
-                            <span class="info-label">Geographies:</span>
-                            <span class="info-value">${Array.from(geos).join(', ')}</span>
-                        </div>`;
-                }
-                statCard.innerHTML += `</div>`;
-                // summary cards are not clickable by default; drill-in via workload list later
-                //statCard.addEventListener('click', () => {
-                //    const wlItem = Array.from(document.querySelectorAll('.workload-item')).find(item => item.textContent === wl);
-                //    if (wlItem) selectWorkload(wl, wlItem);
-                //});
-                statsContainer.appendChild(statCard);
             });
-            // Render footprint analytics after statistics
-            renderFootprintAnalytics();
         }
 
         function renderWorkloadCharts(name) {
@@ -656,6 +674,155 @@
             svcDiv.innerHTML = '<strong>Regions per service:</strong><br>' + Object.entries(services).map(([k,v])=>`${k}: ${v}`).join('<br>');
             geoDiv.innerHTML = '<strong>Regions by geography:</strong><br>' + Object.entries(geos).map(([k,v])=>`${k}: ${v}`).join('<br>');
             coreDiv.innerHTML = '<strong>Cores per namespace:</strong><br>' + Object.entries(coresByNs).map(([k,v])=>`${k}: ${v}`).join('<br>');
+        }
+
+        function renderGeoStackChart() {
+            // breakdown counts by workload -> geo -> status
+            const statuses = ['Major','Smaller','Opportunity'];
+            const geos = ['APAC','EMEA','NOAM'];
+            const counts = {}; // workload -> geo -> status
+            Object.entries(allWorkloads).forEach(([wl, entries]) => {
+                counts[wl] = counts[wl] || {};
+                geos.forEach(g=>counts[wl][g]={Major:0,Smaller:0,Opportunity:0});
+                entries.forEach(e=>{
+                    const geo = e.Geo || 'Unknown';
+                    const status = (e.RegionDeployments ?
+                        Object.values(e.RegionDeployments).find(s=>s) : null) || 'Opportunity';
+                    if (counts[wl][geo]) counts[wl][geo][status] = (counts[wl][geo][status]||0)+1;
+                });
+            });
+            const workloads = Object.keys(counts);
+            const datasets = [];
+            geos.forEach(geo=>{
+                statuses.forEach(stat=>{
+                    datasets.push({
+                        label: `${geo} ${stat}`,
+                        data: workloads.map(wl=>counts[wl][geo][stat]||0),
+                        stack: geo,
+                        backgroundColor: geoColor(geo, stat)
+                    });
+                });
+            });
+            const ctx = document.getElementById('geoStackChart').getContext('2d');
+            if (window.geoStackInstance) window.geoStackInstance.destroy();
+            window.geoStackInstance = new Chart(ctx, {
+                type: 'bar',
+                data: { labels: workloads, datasets },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: { stacked: true },
+                        y: { stacked: true, beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        function renderStatusPieChart() {
+            const breakdown = { Major:0, Smaller:0, Opportunity:0, 'Out-of-Scope':0 };
+            Object.values(allWorkloads).forEach(entries=>{
+                entries.forEach(e=>{
+                    if (e.RegionDeployments) {
+                        Object.values(e.RegionDeployments).forEach(s=>{
+                            if (breakdown.hasOwnProperty(s)) breakdown[s]++;
+                        });
+                    }
+                });
+            });
+            const labels = Object.keys(breakdown).filter(k=>breakdown[k]>0);
+            const data = labels.map(l=>breakdown[l]);
+            const ctx = document.getElementById('statusPieChart').getContext('2d');
+            if (window.statusPieInstance) window.statusPieInstance.destroy();
+            window.statusPieInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: { labels, datasets:[{ data, backgroundColor: labels.map(l=>statusColor(l)) }] },
+                options: { responsive: true }
+            });
+        }
+
+        function renderTreemapChart() {
+            const nodes = [];
+            Object.entries(allWorkloads).forEach(([wl, entries])=>{
+                entries.forEach(e=>{
+                    const ns = e.Namespace || e.Service || wl;
+                    const cores = parseInt(e.Cores)||0;
+                    const geo = e.Geo || 'Unknown';
+                    nodes.push({
+                        label: ns,
+                        value: cores,
+                        backgroundColor: geoSimpleColor(geo)
+                    });
+                });
+            });
+            const ctx = document.getElementById('treemapChart').getContext('2d');
+            if (window.treemapInstance) window.treemapInstance.destroy();
+            window.treemapInstance = new Chart(ctx, {
+                type: 'treemap',
+                data: { datasets:[{ tree: nodes, key: 'value', groups: ['label'], spacing: 1,}}],
+                options: { maintainAspectRatio: false, plugins:{legend:{display:false}} }
+            });
+        }
+
+        function renderWorldMapChart() {
+            // aggregate major counts per geo
+            const majorCounts = { APAC:0, EMEA:0, NOAM:0 };
+            Object.values(allWorkloads).forEach(entries=>{
+                entries.forEach(e=>{
+                    if (e.RegionDeployments) {
+                        Object.values(e.RegionDeployments).forEach(s=>{
+                            if (s==='Major') {
+                                majorCounts[e.Geo] = (majorCounts[e.Geo]||0)+1;
+                            }
+                        });
+                    }
+                });
+            });
+            const points = [
+                {latitude:0, longitude:120, value:majorCounts.APAC||0},
+                {latitude:50, longitude:10, value:majorCounts.EMEA||0},
+                {latitude:40, longitude:-100, value:majorCounts.NOAM||0},
+            ];
+            const canvas = document.getElementById('worldMapChart');
+            const ctx = canvas.getContext('2d');
+            if (window.worldMapInstance) window.worldMapInstance.destroy();
+            fetch('https://unpkg.com/world-atlas@2/countries-110m.json')
+                .then(r=>r.json())
+                .then(world=>{
+                    const countries = ChartGeo.topojson.feature(world, world.objects.countries).features;
+                    window.worldMapInstance = new Chart(ctx, {
+                        type: 'bubbleMap',
+                        data: { labels: [], datasets: [{
+                            label: 'Major footprint by geo',
+                            data: points,
+                            backgroundColor: 'rgba(0,120,212,0.6)'
+                        }] },
+                        options: {
+                            plugins:{legend:{display:false}},
+                            scales:{xy:{projection:'equalEarth'}}
+                        }
+                    });
+                });
+        }
+
+        function geoColor(geo, status) {
+            const base = geo === 'APAC'? 'rgba(0,120,212,' : geo==='EMEA'? 'rgba(0,200,83,' : 'rgba(255,152,0,';
+            const o = status==='Major'?0.8:status==='Smaller'?0.5:0.3;
+            return base + o + ')';
+        }
+
+        function statusColor(s) {
+            if (s==='Major') return '#107c10';
+            if (s==='Smaller') return '#0078d4';
+            if (s==='Opportunity') return '#ff8c00';
+            if (s==='Out-of-Scope') return '#999';
+            return '#ccc';
+        }
+
+        function geoSimpleColor(geo) {
+            if (geo==='APAC') return '#0078d4';
+            if (geo==='EMEA') return '#00c853';
+            if (geo==='NOAM') return '#ff9800';
+            return '#888';
         }
 
         function renderFootprintAnalytics() {
