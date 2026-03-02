@@ -758,7 +758,7 @@
             if (window.treemapInstance) window.treemapInstance.destroy();
             window.treemapInstance = new Chart(ctx, {
                 type: 'treemap',
-                data: { datasets:[{ tree: nodes, key: 'value', groups: ['label'], spacing: 1,}}],
+                data: { datasets:[{ tree: nodes, key: 'value', groups: ['label'], spacing: 1}] },
                 options: { maintainAspectRatio: false, plugins:{legend:{display:false}} }
             });
         }
@@ -785,23 +785,28 @@
             const canvas = document.getElementById('worldMapChart');
             const ctx = canvas.getContext('2d');
             if (window.worldMapInstance) window.worldMapInstance.destroy();
-            fetch('https://unpkg.com/world-atlas@2/countries-110m.json')
-                .then(r=>r.json())
-                .then(world=>{
-                    const countries = ChartGeo.topojson.feature(world, world.objects.countries).features;
-                    window.worldMapInstance = new Chart(ctx, {
-                        type: 'bubbleMap',
-                        data: { labels: [], datasets: [{
-                            label: 'Major footprint by geo',
-                            data: points,
-                            backgroundColor: 'rgba(0,120,212,0.6)'
-                        }] },
-                        options: {
-                            plugins:{legend:{display:false}},
-                            scales:{xy:{projection:'equalEarth'}}
-                        }
-                    });
-                });
+            // simple bubble chart fallback instead of geo map (geo plugin often has issues)
+            window.worldMapInstance = new Chart(ctx, {
+                type: 'bubble',
+                data: {
+                    datasets: [{
+                        label: 'Major footprint by geo',
+                        data: [
+                            {x:0, y:0, r: majorCounts.APAC * 3, label: 'APAC'},
+                            {x:50, y:10, r: majorCounts.EMEA * 3, label: 'EMEA'},
+                            {x:40, y:-100, r: majorCounts.NOAM * 3, label: 'NOAM'}
+                        ],
+                        backgroundColor: 'rgba(0,120,212,0.6)'
+                    }]
+                },
+                options: {
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { beginAtZero: true },
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
         }
 
         function geoColor(geo, status) {
