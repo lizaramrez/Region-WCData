@@ -316,11 +316,47 @@
 
             <!-- Workloads display -->
             <div id="workloadsDisplay" style="display:none;">
-                <div class="display-header">
-                    <h2>Workload Details</h2>
-                    <div id="workloadSub" style="color:#666; font-size:13px">Select a workload to view deployed regions</div>
+                <!-- Default: Statistics & Instructions -->
+                <div id="workloadsDashboard">
+                    <div class="display-header">
+                        <h2>Workload Deployments</h2>
+                        <div id="workloadSub" style="color:#666; font-size:13px">Overview of current deployment footprint</div>
+                    </div>
+
+                    <!-- Statistics Section -->
+                    <div style="margin-bottom: 30px;">
+                        <h3 style="color:#0078d4; font-size:16px; margin-bottom:16px; font-weight:600">Deployment Statistics</h3>
+                        <div id="workloadStats" class="regions-grid"></div>
+                    </div>
+
+                    <!-- Instructions Section -->
+                    <div style="background:#e7f1f8; border-left:4px solid #0078d4; padding:20px; border-radius:6px;">
+                        <h3 style="color:#0078d4; font-size:16px; margin-bottom:12px; font-weight:600">📋 How to Expand Your Workload Footprint</h3>
+                        <div style="color:#333; font-size:14px; line-height:1.6;">
+                            <p style="margin-bottom:10px"><strong>Select a workload</strong> from the left panel to:</p>
+                            <ul style="margin-left:20px; margin-bottom:10px;">
+                                <li>View currently deployed regions</li>
+                                <li>See region details (Type, Cloud)</li>
+                                <li>Identify opportunities for expansion</li>
+                            </ul>
+                            <p style="margin-bottom:10px"><strong>Use the Regions tab</strong> to:</p>
+                            <ul style="margin-left:20px;">
+                                <li>Filter by geographic location (APAC, EMEA, NOAM)</li>
+                                <li>Review all available regions</li>
+                                <li>Plan new deployment locations</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-                <div id="workloadRegionsContainer" class="regions-grid"></div>
+
+                <!-- Detail View (shown when workload selected) -->
+                <div id="workloadsDetail" style="display:none;">
+                    <div class="display-header">
+                        <h2 id="selectedWorkloadName">Workload Details</h2>
+                        <div id="workloadDetailSub" style="color:#666; font-size:13px">Currently deployed regions</div>
+                    </div>
+                    <div id="workloadRegionsContainer" class="regions-grid"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -423,6 +459,12 @@
             workloadNav.style.display = 'block';
             regionsDisplay.style.display = 'none';
             workloadsDisplay.style.display = 'block';
+            // Deselect any workload and show dashboard
+            if (selectedWorkloadBtn) selectedWorkloadBtn.classList.remove('active');
+            selectedWorkloadBtn = null;
+            document.getElementById('workloadsDashboard').style.display = 'block';
+            document.getElementById('workloadsDetail').style.display = 'none';
+            renderWorkloadStatistics();
         });
 
         // Workloads UI
@@ -448,7 +490,10 @@
             if (selectedWorkloadBtn) selectedWorkloadBtn.classList.remove('active');
             btnEl.classList.add('active');
             selectedWorkloadBtn = btnEl;
-            document.getElementById('workloadSub').textContent = `Showing regions for ${name}`;
+            document.getElementById('workloadsDashboard').style.display = 'none';
+            document.getElementById('workloadsDetail').style.display = 'block';
+            document.getElementById('selectedWorkloadName').textContent = `${name} - Deployment Details`;
+            document.getElementById('workloadDetailSub').textContent = `Currently deployed regions for ${name}`;
             renderWorkloadRegions(name);
         }
 
@@ -473,6 +518,51 @@
                         <div class="info-row"><span class="info-label">Status:</span><span class="info-value">${reg.status}</span></div>
                     </div>`;
                 container.appendChild(card);
+            });
+        }
+
+        function renderWorkloadStatistics() {
+            const statsContainer = document.getElementById('workloadStats');
+            statsContainer.innerHTML = '';
+            const keys = Object.keys(allWorkloads || {});
+            
+            if (keys.length === 0) {
+                statsContainer.innerHTML = `<div style="grid-column:1/-1"><div class="empty-state"><div class="empty-state-icon">📊</div><p>No workload data available</p></div></div>`;
+                return;
+            }
+
+            keys.forEach(wl => {
+                const entries = allWorkloads[wl] || [];
+                const deployedCount = entries.length;
+                const statCard = document.createElement('div');
+                statCard.className = 'region-card';
+                statCard.style.cursor = 'pointer';
+                statCard.innerHTML = `
+                    <div class="region-name">${wl}</div>
+                    <div class="region-info">
+                        <div class="info-row">
+                            <span class="info-label">Deployed Regions:</span>
+                            <span class="info-value" style="font-size:18px; font-weight:600; color:#0078d4">${deployedCount}</span>
+                        </div>`;
+                if (deployedCount > 0) {
+                    const geos = new Set();
+                    entries.forEach(e => {
+                        Object.entries(allRegionsData).forEach(([geo, regions]) => {
+                            if (regions.some(r => r.name === e.region)) geos.add(geo);
+                        });
+                    });
+                    statCard.innerHTML += `
+                        <div class="info-row">
+                            <span class="info-label">Geographies:</span>
+                            <span class="info-value">${Array.from(geos).join(', ')}</span>
+                        </div>`;
+                }
+                statCard.innerHTML += `</div>`;
+                statCard.addEventListener('click', () => {
+                    const wlItem = Array.from(document.querySelectorAll('.workload-item')).find(item => item.textContent === wl);
+                    if (wlItem) selectWorkload(wl, wlItem);
+                });
+                statsContainer.appendChild(statCard);
             });
         }
     </script>
