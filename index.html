@@ -831,7 +831,7 @@
                 coverageDiv.innerHTML = '<em style="color:#999">No deployment data available.</em>';
             } else {
                 const sorted = Object.entries(regionCoverage).sort((a, b) => b[1] - a[1]);
-                coverageDiv.innerHTML = sorted.map(([region, count]) => `<div>${region}: <strong>${count}</strong> workload(s)</div>`).join('');
+                coverageDiv.innerHTML = sorted.map(([region, count]) => `<div>${region}: <strong>${count}</strong> deployment(s)</div>`).join('');
             }
 
             // Render Namespace Deployments
