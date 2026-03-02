@@ -1,0 +1,101 @@
+﻿Cloud Type,Description,,
+Public,"Standard Azure cloud, available to all customers globally",,
+Mooncake,"Azure China — operated by 21Vianet, subject to Chinese regulations",,
+Fairfax,Azure for US Federal Government — restricted to US government agencies,,
+USGov (LX),Air-gapped cloud — isolated network for high security with no internet,,
+USNat,"Highest security US cloud — air-gapped, for national security workloads",,
+USSec (EX),Air-gapped cloud — isolated network for high security with no internet. For classified government workloads,,
+New Sovereign (coming soon),"France (BLEU), Germany (DELOS), Singapore (SGN)",,
+,,,
+,,,
+Region Type,Description,,
+Hero,Designed to offer all Azure services (Rings 0-2). Always support Availability Zones. Often lower prices than other regions in the geography. Always have a paired region,,
+Hub,Designed to offer all Ring 0 and Ring 1 services. Always have a paired region,,
+Satellite,Contains Ring 0 services. Typically smaller and higher priced than Hub or Hero regions,,
+Micro,Smaller regions with 3 AZs. Typically the only region in a specific geography (e.g. UAE North) serving very specific or niche purposes,,
+,,,
+,,,
+Region,RegionType,State,CloudType
+East Asia,Hub,Production SLA,Public
+Southeast Asia,Hero,Production SLA,Public
+Australia Central,Satellite,Production SLA,Public
+Australia Central 2,Satellite,Production SLA,Public
+Australia East,Hero,Production SLA,Public
+Australia Southeast,Satellite,Production SLA,Public
+Austria East,Micro,Production SLA,Public
+Belgium Central,Micro,Production SLA,Public
+Brazil Southeast,Satellite,Production SLA,Public
+Brazil South,Hub,Production SLA,Public
+Canada Central,Hub,Production SLA,Public
+Canada East,Satellite,Production SLA,Public
+Chile Central,Micro,Production SLA,Public
+China East 2,Hub,Production SLA,Mooncake
+China East 3,Satellite,Production SLA,Mooncake
+China East,Satellite,Production SLA,Mooncake
+China North 2,Satellite,Production SLA,Mooncake
+China North 3,Hub,Production SLA,Mooncake
+China North,Satellite,Production SLA,Mooncake
+Denmark East,Micro,Production SLA,Public
+North Europe,Hero,Production SLA,Public
+West Europe,Hero,Production SLA,Public
+France Central,Hub,Production SLA,Public
+France South,Satellite,Production SLA,Public
+Germany North,Satellite,Production SLA,Public
+Germany West Central,Hub,Production SLA,Public
+Central India,Hub,Production SLA,Public
+South India,Satellite,Production SLA,Public
+West India,Satellite,Production SLA,Public
+Indonesia Central,Hub,Production SLA,Public
+Israel Central,Micro,Production SLA,Public
+Israel Northwest,Hub,Production SLA,Public
+Italy North,Hub,Production SLA,Public
+Japan East,Hub,Production SLA,Public
+Japan West,Hub,Production SLA,Public
+Jio India Central,Satellite,Production SLA,Public
+Jio India West,Hub,Production SLA,Public
+Korea Central,Hub,Production SLA,Public
+Korea South,Satellite,Production SLA,Public
+Malaysia South,Satellite,Production SLA,Public
+Malaysia West,Hub,Production SLA,Public
+Mexico Central,Hub,Production SLA,Public
+New Zealand North,Micro,Production SLA,Public
+Norway East,Hub,Production SLA,Public
+Norway West,Satellite,Production SLA,Public
+Poland Central,Hub,Production SLA,Public
+Qatar Central,Micro,Production SLA,Public
+South Africa North,Hub,Production SLA,Public
+South Africa West,Satellite,Production SLA,Public
+Spain Central,Hub,Production SLA,Public
+Sweden Central,Hero,Production SLA,Public
+Sweden South,Satellite,Production SLA,Public
+Switzerland North,Hub,Production SLA,Public
+Switzerland West,Satellite,Production SLA,Public
+Taiwan North,Hub,Production SLA,Public
+Taiwan Northwest,Satellite,Production SLA,Public
+UAE Central,Satellite,Production SLA,Public
+UAE North,Hub,Production SLA,Public
+UK South,Hero,Production SLA,Public
+UK West,Satellite,Production SLA,Public
+Central US,Hub,Production SLA,Public
+Central US EUAP,Satellite,Production SLA,Public
+USDoD Central,Satellite,Production SLA,Fairfax
+USDoD East,Satellite,Production SLA,Fairfax
+East US,Hero,Production SLA,Public
+East US 2,Hero,Production SLA,Public
+East US 2 EUAP,Satellite,Production SLA,Public
+USGov Virginia,Hub,Production SLA,Fairfax
+USGov Texas,Satellite,Production SLA,Fairfax
+USGov Arizona,Hub,Production SLA,Fairfax
+USNat East,Satellite,Production SLA,USNat
+USNat West,Hub,Production SLA,USNat
+North Central US,Hub,Production SLA,Public
+USSec East,Hub,Production SLA,USSec
+USSec West,Satellite,Production SLA,USSec
+USSec West Central,Hub,Production SLA,USSec
+South Central US,Hero,Production SLA,Public
+East US STG,Satellite,Production SLA,Public
+South Central US STG,Satellite,Production SLA,Public
+West US,Hub,Production SLA,Public
+West US 2,Hero,Production SLA,Public
+West US 3,Hero,Production SLA,Public
+West Central US,Satellite,Production SLA,Public
