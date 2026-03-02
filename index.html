@@ -703,13 +703,16 @@
                     });
                 });
             });
-            const ctx = document.getElementById('geoStackChart').getContext('2d');
+            const canvas = document.getElementById('geoStackChart');
+            canvas.width = canvas.offsetWidth;
+            canvas.height = 250;
+            const ctx = canvas.getContext('2d');
             if (window.geoStackInstance) window.geoStackInstance.destroy();
             window.geoStackInstance = new Chart(ctx, {
                 type: 'bar',
                 data: { labels: workloads, datasets },
                 options: {
-                    responsive: true,
+                    responsive: false,
                     scales: {
                         x: { stacked: true },
                         y: { stacked: true, beginAtZero: true }
@@ -731,12 +734,15 @@
             });
             const labels = Object.keys(breakdown).filter(k=>breakdown[k]>0);
             const data = labels.map(l=>breakdown[l]);
-            const ctx = document.getElementById('statusPieChart').getContext('2d');
+            const canvas = document.getElementById('statusPieChart');
+            canvas.width = canvas.offsetWidth;
+            canvas.height = 200;
+            const ctx = canvas.getContext('2d');
             if (window.statusPieInstance) window.statusPieInstance.destroy();
             window.statusPieInstance = new Chart(ctx, {
                 type: 'doughnut',
                 data: { labels, datasets:[{ data, backgroundColor: labels.map(l=>statusColor(l)) }] },
-                options: { responsive: true }
+                options: { responsive: false }
             });
         }
 
@@ -754,12 +760,15 @@
                     });
                 });
             });
-            const ctx = document.getElementById('treemapChart').getContext('2d');
+            const canvas = document.getElementById('treemapChart');
+            canvas.width = canvas.offsetWidth;
+            canvas.height = 300;
+            const ctx = canvas.getContext('2d');
             if (window.treemapInstance) window.treemapInstance.destroy();
             window.treemapInstance = new Chart(ctx, {
                 type: 'treemap',
                 data: { datasets:[{ tree: nodes, key: 'value', groups: ['label'], spacing: 1}] },
-                options: { maintainAspectRatio: false, plugins:{legend:{display:false}} }
+                options: { responsive: false, maintainAspectRatio: false, plugins:{legend:{display:false}} }
             });
         }
 
