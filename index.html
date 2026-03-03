@@ -435,7 +435,7 @@
                         <div id="serviceBreakdownCharts"></div>
                         <div style="margin-top:32px;">
                             <h4 style="color:#0078d4; font-size:15px; font-weight:600; margin-bottom:10px;">Region Names Matrix</h4>
-                            <div style="margin-bottom:18px;padding:16px 22px;background:linear-gradient(90deg,#f7fafd 60%,#f0f4f8 100%);border:1px solid #e0e0e0;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.03);max-width:700px;">
+                            <div style="margin-bottom:18px;padding:16px 22px;background:linear-gradient(90deg,#f7fafd 60%,#f0f4f8 100%);border:1px solid #e0e0e0;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.03);width:100%;">
                                 <div id="namespaceRegionMatrix"></div>
                         </div>
 
@@ -465,6 +465,7 @@
             displayRegions();
             renderWorkloadList();
         }).catch(err => console.error('Error loading data', err));
+
 
         // Region filters
         const filterCheckboxes = document.querySelectorAll('#apac,#emea,#noam');
@@ -519,6 +520,11 @@
                 container.innerHTML = `<div style="grid-column:1/-1"><div class="empty-state"><div class="empty-state-icon">📭</div><p>No regions selected</p></div></div>`;
             }
         }
+
+        // Set default tab to Workloads on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof tabWorkloadsBtn !== 'undefined') tabWorkloadsBtn.click();
+        });
 
         // Tab switching
         const tabRegionsBtn = document.getElementById('tabRegions');
