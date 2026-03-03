@@ -418,17 +418,7 @@
 
 
                     <!-- Regions content -->
-                    <div id="regionsView">
-                        <div id="workloadRegionsContainer" class="regions-grid"></div>
-                        <!-- Charts area -->
-                        <div id="workloadCharts" style="margin-top:30px;">
-                            <h3 style="color:#0078d4; font-size:16px; margin-bottom:12px; font-weight:600">Footprint Breakdown</h3>
-                            <div id="chartServices" style="margin-bottom:18px;"></div>
-                            <div id="chartGeos" style="margin-bottom:18px;"></div>
-                            <div id="chartCores" style="margin-bottom:18px;"></div>
-
-                        </div>
-                    </div>
+                    <!-- Removed regionsView: now only breakdownView and flexView remain as main content divs -->
 
                     <!-- Breakdown per service -->
                     <div id="breakdownView" style="display:none;">
@@ -443,12 +433,23 @@
                             </div>
                             <div style="margin-bottom:18px;padding:16px 22px;background:linear-gradient(90deg,#f7fafd 60%,#f0f4f8 100%);border:1px solid #e0e0e0;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.03);width:100%;">
                                 <div id="namespaceRegionMatrix"></div>
+                            </div>
                         </div>
-
                     </div>
 
-                    <!-- Flexibility editor -->
+                    <!-- Flexibility editor (now sibling, not child, of breakdownView) -->
                     <div id="flexView" style="display:none;">
+                        <div class="instructions" style="max-width:600px;font-size:15px;line-height:1.5;background:#fffbe6;border:1px solid #e0e0e0;padding:18px 22px;margin:24px auto 0 auto;box-shadow:0 2px 8px #0001;">
+<strong>ASSUMPTIONS:</strong><br>
+1) In regions where there is 'Opportunity,' we assume for this exercise that there IS capacity available.<br>
+2) Services can only add/expand in a region that is <strong>within the same Geo</strong> where there are constraints.<br>
+3) Only PROD ring is in-scope (but MSIT could be added, if needed, though the footprint in that ring is small at the service level)<br>
+4) Only Azure Public Cloud regions are in-scope due to Special Clouds generally only having 2 regions for failover.<br>
+5) Only Azure Hero and Hub regions because Micro and Satellite regions historically have minimal capacity availability.<br>
+6) Services listed could have a small footprint in Micro/Satellite regions, but they are not shown on this tab -- <em>see 'Region Mapping' tab for full PROD footprint.</em><br><br>
+<strong>OTHER CONSIDERATIONS</strong> <em>(not currently built into our assumptions/logic, but should be manually factored into the decision to include a region as an opportunity):</em><br>
+1) <strong>Service-specific requirements:</strong> See tab 'ServiceRequirements'
+                        </div>
                         <div id="flexEditor" style="font-size:13px;color:#333;"></div>
                     </div>
                 </div>
@@ -970,10 +971,14 @@
 
         function showDetailSection(section) {
             // hide all views
-            ['regionsView','breakdownView','flexView'].forEach(id=>{
+            ['breakdownView','flexView'].forEach(id=>{
                 const el = document.getElementById(id);
                 if (el) el.style.display = (id.indexOf(section) !== -1) ? 'block' : 'none';
             });
+            const regionsView = document.getElementById('regionsView');
+            if (regionsView && section === 'regions') {
+                regionsView.style.display = 'block';
+            }
             // update active link styling
             ['Regions','Breakdown','Flex'].forEach(s=>{
                 const a = document.getElementById('subnav'+s);
