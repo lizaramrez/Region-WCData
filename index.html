@@ -439,7 +439,7 @@
 
                     <!-- Flexibility editor (now sibling, not child, of breakdownView) -->
                     <div id="flexView" style="display:none;">
-                        <div class="instructions" style="max-width:600px;font-size:15px;line-height:1.5;background:#fffbe6;border:1px solid #e0e0e0;padding:18px 22px;margin:24px auto 0 auto;box-shadow:0 2px 8px #0001;">
+                        <div class="instructions" style="max-width:1000px;width:100%;font-size:15px;line-height:1.4;background:#fff;border:1px solid #e0e0e0;padding:12px 28px 12px 28px;margin:18px 0 18px 0;box-shadow:0 2px 8px #0001;text-align:left;">
 <strong>ASSUMPTIONS:</strong><br>
 1) In regions where there is 'Opportunity,' we assume for this exercise that there IS capacity available.<br>
 2) Services can only add/expand in a region that is <strong>within the same Geo</strong> where there are constraints.<br>
@@ -980,14 +980,12 @@
                 regionsView.style.display = 'block';
             }
             // update active link styling
-            ['Regions','Breakdown','Flex'].forEach(s=>{
-                const a = document.getElementById('subnav'+s);
-                if (a) {
-                    if (s.toLowerCase().startsWith(section)) {
-                        a.style.fontWeight = '600';
-                    } else {
-                        a.style.fontWeight = '400';
-                    }
+            // Only bold the active subnav link (Breakdown or Flex)
+            document.querySelectorAll('.subitem[data-action="breakdown"], .subitem[data-action="flex"]').forEach(el => {
+                if (el.getAttribute('data-action') === section) {
+                    el.style.fontWeight = '600';
+                } else {
+                    el.style.fontWeight = '400';
                 }
             });
             if (section==='breakdown') {
