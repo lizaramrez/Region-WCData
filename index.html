@@ -1073,16 +1073,55 @@
 
         function renderFlexEditor(name) {
             const entries = allWorkloads[name] || [];
-            const html = entries.map((e,i)=>{
-                const regions = e.RegionDeployments || {};
-                return `<div style="margin-bottom:16px;padding:12px;border:1px solid #ccc;border-radius:4px;">
-                    <strong>Service:</strong> ${e.Service||''} <br>
-                    <strong>Namespace:</strong> ${e.Namespace||''}<br>
-                    ${Object.entries(regions).map(([r,s])=>
-                        `<div style="margin-top:4px;">${r}: <select data-idx="${i}" data-region="${r}"><option${s==='Major'?' selected':''}>Major</option><option${s==='Smaller'?' selected':''}>Smaller</option><option${s==='Opportunity'?' selected':''}>Opportunity</option><option${s==='Out-of-Scope'?' selected':''}>Out-of-Scope</option></select></div>`
-                    ).join('')}
-                </div>`;
-            }).join('');
+            // Group by Service+Namespace
+            const grouped = {};
+            entries.forEach((e, i) => {
+                const key = (e.Service||'') + '||' + (e.Namespace||'');
+                if (!grouped[key]) grouped[key] = { Service: e.Service, Namespace: e.Namespace, regions: {}, indices: [] };
+                Object.entries(e.RegionDeployments || {}).forEach(([r, s]) => {
+                    grouped[key].regions[r] = { status: s, entryIdx: i };
+                });
+                grouped[key].indices.push(i);
+            });
+
+            let html = '';
+            Object.values(grouped).forEach(group => {
+                html += `<div style="margin-bottom:16px;padding:12px;border:1px solid #ccc;border-radius:4px;">
+                    <strong>Service:</strong> ${group.Service||''} <br>
+                    <strong>Namespace:</strong> ${group.Namespace||''}<br>`;
+                // Group regions by geo
+                const geoRegions = { EMEA: [], APAC: [], NOAM: [] };
+                Object.keys(group.regions).forEach(region => {
+                    let geo = '';
+                    for (const g of Object.keys(allRegionsData)) {
+                        if ((allRegionsData[g]||[]).some(r=>r.name===region)) { geo = g; break; }
+                    }
+                    if (!geo) geo = 'Other';
+                    if (!geoRegions[geo]) geoRegions[geo] = [];
+                    geoRegions[geo].push(region);
+                });
+                // Render by geo, like the Excel layout
+                ['EMEA','APAC','NOAM','Other'].forEach(geo => {
+                    if (geoRegions[geo] && geoRegions[geo].length) {
+                        html += `<div style="background:#e7effa;font-weight:600;margin:12px 0 4px 0;padding:4px 8px;border-radius:4px;">${geo}</div>`;
+                        html += '<div style="display:flex;flex-wrap:wrap;gap:18px 24px;margin-bottom:8px;">';
+                        geoRegions[geo].forEach(region => {
+                            const { status, entryIdx } = group.regions[region];
+                            html += `<div style="min-width:140px;margin-bottom:6px;">
+                                <div style="font-size:14px;font-weight:500;">${region}</div>
+                                <select data-idx="${entryIdx}" data-region="${region}" style="margin-top:2px;width:100%;padding:2px 4px;">
+                                    <option${status==='Major'?' selected':''}>Major</option>
+                                    <option${status==='Smaller'?' selected':''}>Smaller</option>
+                                    <option${status==='Opportunity'?' selected':''}>Opportunity</option>
+                                    <option${status==='Out-of-Scope'?' selected':''}>Out-of-Scope</option>
+                                </select>
+                            </div>`;
+                        });
+                        html += '</div>';
+                    }
+                });
+                html += '</div>';
+            });
             const flexDiv = document.getElementById('flexEditor');
             flexDiv.innerHTML = html || '<em>No entries to edit</em>';
             // attach change handlers to update in-memory data
