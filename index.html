@@ -464,6 +464,13 @@
             allWorkloads = workloadsData || {};
             displayRegions();
             renderWorkloadList();
+            // Auto-select and expand the first workload
+            setTimeout(() => {
+                const firstHeader = document.querySelector('.accordion-header');
+                if (firstHeader) {
+                    firstHeader.click();
+                }
+            }, 0);
         }).catch(err => console.error('Error loading data', err));
 
 
@@ -584,7 +591,13 @@
         // Workloads UI
         function renderWorkloadList() {
             const wlContainer = document.getElementById('workloadList');
-            const keys = Object.keys(allWorkloads || {});
+            let keys = Object.keys(allWorkloads || {});
+            // Move IC3 to the front if present
+            keys = keys.sort((a, b) => {
+                if (a === 'IC3') return -1;
+                if (b === 'IC3') return 1;
+                return 0;
+            });
             if (keys.length === 0) {
                 wlContainer.innerHTML = '<div style="color:#999;font-size:13px">No workload data available.</div>';
                 return;
@@ -983,32 +996,69 @@
                 byService[svc].regions += 1;
                 byService[svc].cores += parseInt(e.Cores)||0;
             });
-            const labels = Object.keys(byService);
-            const regionData = labels.map(l=>byService[l].regions);
-            const coresData = labels.map(l=>byService[l].cores);
             const div = document.getElementById('serviceBreakdownCharts');
-            div.innerHTML = '<canvas id="serviceRegionsChart"></canvas><canvas id="serviceCoresChart"></canvas>';
-            // regions per service bar
-            const canvas1 = document.getElementById('serviceRegionsChart');
-            canvas1.width = div.offsetWidth || 500;
-            canvas1.height = 200;
-            const ctx1 = canvas1.getContext('2d');
-            if (window.srvRegChart) window.srvRegChart.destroy();
-            window.srvRegChart = new Chart(ctx1,{
-                type:'bar',
-                data:{labels,datasets:[{label:'Regions per Service',data:regionData,backgroundColor:'#0078d4'}]},
-                options:{responsive:false, scales:{y:{beginAtZero:true}}}
+            div.innerHTML = '<div><h4 style="color:#0078d4;font-size:15px;font-weight:600;margin-bottom:10px;">GEO per Namespace (Cores)</h4><canvas id="geoServiceBreakdownChart"></canvas></div>';
+
+            // GEO per Namespace horizontal bar chart
+            // Prepare data: geo -> namespace -> {cores}
+            const geos = ['APAC', 'EMEA', 'NOAM'];
+            const nsGeoData = {};
+            entries.forEach(e => {
+                const ns = e.Namespace || e.namespace || 'Unknown';
+                const geo = e.Geo || e.geo || 'Unknown';
+                if (!nsGeoData[geo]) nsGeoData[geo] = {};
+                if (!nsGeoData[geo][ns]) nsGeoData[geo][ns] = {cores:0};
+                nsGeoData[geo][ns].cores += parseInt(e.Cores)||0;
             });
-            // cores per service bar
-            const canvas2 = document.getElementById('serviceCoresChart');
-            canvas2.width = div.offsetWidth || 500;
-            canvas2.height = 200;
-            const ctx2 = canvas2.getContext('2d');
-            if (window.srvCoresChart) window.srvCoresChart.destroy();
-            window.srvCoresChart = new Chart(ctx2,{
-                type:'bar',
-                data:{labels,datasets:[{label:'Cores per Service',data:coresData,backgroundColor:'#00c853'}]},
-                options:{responsive:false, scales:{y:{beginAtZero:true}}}
+
+            // Build datasets: for each metric, one dataset per geo
+            const allNamespaces = Array.from(new Set(entries.map(e => e.Namespace || e.namespace || 'Unknown')));
+            function buildData(metric) {
+                return geos.map(geo => allNamespaces.map(ns => (nsGeoData[geo][ns] ? nsGeoData[geo][ns][metric] : 0)));
+            }
+            const chartData = {
+                labels: allNamespaces,
+                datasets: [
+                    {
+                        label: 'APAC Cores',
+                        backgroundColor: '#0078d4', // blue
+                        data: buildData('cores')[0],
+                        stack: 'APAC'
+                    },
+                    {
+                        label: 'EMEA Cores',
+                        backgroundColor: '#e81123', // red
+                        data: buildData('cores')[1],
+                        stack: 'EMEA'
+                    },
+                    {
+                        label: 'NOAM Cores',
+                        backgroundColor: '#107c10', // green
+                        data: buildData('cores')[2],
+                        stack: 'NOAM'
+                    }
+                ]
+            };
+
+            const geoCanvas = document.getElementById('geoServiceBreakdownChart');
+            geoCanvas.width = div.offsetWidth || 700;
+            geoCanvas.height = 400;
+            if (window.geoServiceBreakdownChart && typeof window.geoServiceBreakdownChart.destroy === 'function') window.geoServiceBreakdownChart.destroy();
+            window.geoServiceBreakdownChart = new Chart(geoCanvas, {
+                type: 'bar',
+                data: chartData,
+                options: {
+                    indexAxis: 'y',
+                    responsive: false,
+                    scales: {
+                        x: { beginAtZero: true },
+                        y: { stacked: true }
+                    },
+                    plugins: {
+                        legend: { position: 'top' },
+                        title: { display: false }
+                    }
+                }
             });
         }
 
