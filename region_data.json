@@ -379,5 +379,15 @@
       "regionType": "Standard",
       "cloudType": "Public"
     }
+    ,{
+      "name": "Brazil South",
+      "regionType": "Hub",
+      "cloudType": "Public"
+    }
+    ,{
+      "name": "Brazil Southeast",
+      "regionType": "Satellite",
+      "cloudType": "Public"
+    }
   ]
 }
