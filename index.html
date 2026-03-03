@@ -1084,32 +1084,44 @@
                 grouped[key].indices.push(i);
             });
 
-            // Map Service to Namespace
-            const serviceToNamespace = {};
+            // Map Service to all Namespaces
+            const serviceToNamespaces = {};
             entries.forEach(e => {
-                if (e.Service && e.Namespace) serviceToNamespace[e.Service] = e.Namespace;
+                if (e.Service && e.Namespace) {
+                    if (!serviceToNamespaces[e.Service]) serviceToNamespaces[e.Service] = [];
+                    if (!serviceToNamespaces[e.Service].includes(e.Namespace)) serviceToNamespaces[e.Service].push(e.Namespace);
+                }
             });
-            const allServices = Object.keys(serviceToNamespace);
+            const allServices = Object.keys(serviceToNamespaces);
 
-            // State: selected service
+            // State: selected service and namespace
             let selectedService = window.selectedFlexService || allServices[0] || '';
             if (!allServices.includes(selectedService)) selectedService = allServices[0] || '';
             window.selectedFlexService = selectedService;
 
-            // Auto-select Namespace for Service
-            const selectedNamespace = serviceToNamespace[selectedService] || '';
+            let selectedNamespace = window.selectedFlexNamespace;
+            const namespacesForService = serviceToNamespaces[selectedService] || [];
+            if (!selectedNamespace || !namespacesForService.includes(selectedNamespace)) {
+                selectedNamespace = namespacesForService[0] || '';
+            }
+            window.selectedFlexNamespace = selectedNamespace;
+
             const groupKey = selectedService + '||' + selectedNamespace;
             const group = grouped[groupKey];
 
             let html = '';
-            // Service dropdown only
+            // Service dropdown
             html += `<label style="font-weight:600;margin-right:8px;">Service:</label><select id="flexServiceSelect" style="margin-bottom:12px;">`;
             allServices.forEach(s => {
                 html += `<option value="${s}"${s===selectedService?' selected':''}>${s}</option>`;
             });
             html += `</select>`;
-            // Show namespace as text
-            html += `<label style="font-weight:600;margin:0 8px 0 24px;">Namespace:</label><span id="flexNamespaceDisplay" style="margin-bottom:12px;display:inline-block;min-width:180px;">${selectedNamespace}</span>`;
+            // Namespace dropdown
+            html += `<label style="font-weight:600;margin:0 8px 0 24px;">Namespace:</label><select id="flexNamespaceSelect" style="margin-bottom:12px;min-width:180px;">`;
+            namespacesForService.forEach(ns => {
+                html += `<option value="${ns}"${ns===selectedNamespace?' selected':''}>${ns}</option>`;
+            });
+            html += `</select>`;
 
             if (group) {
                 html += `<div style="margin-bottom:16px;padding:12px;border:1px solid #ccc;border-radius:4px;">
@@ -1158,6 +1170,12 @@
                 if (sel.id === 'flexServiceSelect') {
                     sel.addEventListener('change', e => {
                         window.selectedFlexService = e.target.value;
+                        window.selectedFlexNamespace = undefined;
+                        renderFlexEditor(name);
+                    });
+                } else if (sel.id === 'flexNamespaceSelect') {
+                    sel.addEventListener('change', e => {
+                        window.selectedFlexNamespace = e.target.value;
                         renderFlexEditor(name);
                     });
                 } else {
